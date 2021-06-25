@@ -4,19 +4,15 @@
         <!--selection controls.-->
         <item name="colorPrimary">@color/blue_700</item>
         <item name="colorPrimaryVariant">@color/blue_500</item>
-        <item name="colorSecondary">@color/cyan_200</item>
-        <item name="colorSecondaryVariant">@color/cyan_400</item>
+        <item name="colorSecondary">@color/green_light</item>
+        <item name="colorSecondaryVariant">@color/green_dark</item>
 
         <!--text fields.-->
         <item name="android:colorBackground">@color/black_dark_primary</item>
         <item name="colorSurface">@color/black_dark_secondary</item>
         <item name="colorError">@color/red_light</item>
-        <item name="support_separator">@color/white_20</item>
-        <item name="support_overlay">@color/black_32</item>
-        <item name="label_primary">@color/white</item>
-        <item name="label_secondary">@color/white_60</item>
-        <item name="label_tertiary">@color/white_40</item>
-        <item name="label_disable">@color/white_15</item>
+
+
 
         <!--on which they appear.-->
         <item name="colorOnPrimary">@color/white</item>
@@ -24,6 +20,12 @@
         <item name="colorOnBackground">@color/white</item>
         <item name="colorOnSurface">@color/white_60</item>
         <item name="colorOnError">@color/white</item>
+        <item name="support_separator">@color/white_20</item>
+        <item name="support_overlay">@color/black_32</item>
+        <item name="label_primary">@color/white</item>
+        <item name="label_secondary">@color/white_60</item>
+        <item name="label_tertiary">@color/white_40</item>
+        <item name="label_disable">@color/white_15</item>
 
 
 

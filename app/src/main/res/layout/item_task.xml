@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="12dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="12dp"
+    android:orientation="horizontal">
+
+    <CheckBox
+        android:id="@+id/cbItemTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <ImageView
+        android:id="@+id/priorityImgItemTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginEnd="6dp"
+        android:src="@drawable/ic_priority_high"
+        tools:visibility="visible"
+        tools:ignore="ContentDescription" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvItemText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="6dp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textAppearance="@style/TextAppearance.MyTheme.Body2"
+            tools:text="Купить что-то, где-то, зачем-то, но зачем не очень понятно, но точно чтобы показать как обрезается вот это длинная строка из трех строчек"
+            />
+        <TextView
+            android:id="@+id/tvItemDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            tools:text="Дата"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/infoImgItemTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:src="@drawable/ic_info_outline"
+        tools:ignore="ContentDescription" />
+</LinearLayout>
