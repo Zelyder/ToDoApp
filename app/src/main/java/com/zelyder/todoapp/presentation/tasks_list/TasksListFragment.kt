@@ -6,22 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.zelyder.todoapp.MyApp
 import com.zelyder.todoapp.R
 import com.zelyder.todoapp.data.DataSource
 import com.zelyder.todoapp.domain.models.Task
-import com.zelyder.todoapp.presentation.core.SwipeGesture
+import com.zelyder.todoapp.viewModelFactoryProvider
 
 class TasksListFragment : Fragment(), TasksListItemClickListener {
+    private val viewModel: TasksListViewModel by viewModels { viewModelFactoryProvider().viewModelFactory() }
 
     var recyclerView: RecyclerView? = null
     var visibilityImg: ImageView? = null
-    var isHided: Boolean = true
-
-    private val removedTasks = mutableListOf<Task>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,36 +43,29 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
         val itemTouchHelper = ItemTouchHelper(SwipeGesture(adapter, requireContext()))
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        if(adapter.currentList.isEmpty()) {
-            val data = DataSource.getData()
-            data.forEach { if(it.isDone) removedTasks.add(it) }
-            adapter.submitList(data.filter { !it.isDone })
+        viewModel.tasks.observe(viewLifecycleOwner) { tasks ->
+            adapter.submitList(tasks)
         }
 
+        viewModel.isHided.observe(viewLifecycleOwner) { isHided ->
+            if (isHided) {
+                visibilityImg?.setImageResource(R.drawable.ic_visibility_off)
+            } else {
+                visibilityImg?.setImageResource(R.drawable.ic_visibility_on)
+            }
+        }
+
+        viewModel.updateList()
 
         visibilityImg = view.findViewById(R.id.visibilityImg)
 
         visibilityImg?.setOnClickListener {
-            if (isHided) {
-                visibilityImg?.setImageResource(R.drawable.ic_visibility_off)
-                adapter.submitList(adapter.currentList + removedTasks)
-            } else {
-                visibilityImg?.setImageResource(R.drawable.ic_visibility_on)
-                adapter.submitList(adapter.currentList.filter { !it.isDone })
-            }
-            isHided = !isHided
+            viewModel.toggleVisibility()
         }
     }
 
     override fun onCheck(task: Task) {
-        if (task.isDone) {
-            removedTasks.add(task)
-        } else {
-            if (task in removedTasks) {
-                removedTasks.remove(task)
-            }
-        }
-
+        viewModel.checkTask(task)
     }
 
     override fun onItemClick(task: Task) {
@@ -79,8 +73,6 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
     }
 
     override fun onDelete(task: Task) {
-        if(task.isDone){
-            removedTasks.remove(task)
-        }
+        viewModel.deleteTask(task)
     }
 }

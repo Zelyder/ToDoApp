@@ -1,4 +1,4 @@
-package com.zelyder.todoapp.presentation.core
+package com.zelyder.todoapp.presentation.tasks_list
 
 import android.content.Context
 import android.graphics.Canvas
