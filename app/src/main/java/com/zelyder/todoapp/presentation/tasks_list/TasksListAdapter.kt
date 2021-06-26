@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zelyder.todoapp.R
 import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.models.Task
+import kotlinx.coroutines.channels.consumesAll
 
 class TasksListAdapter(val clickListener: TasksListItemClickListener) : ListAdapter<Task, TasksListAdapter.TasksViewHolder>(TASKS_COMPARATOR) {
 
@@ -30,6 +31,23 @@ class TasksListAdapter(val clickListener: TasksListItemClickListener) : ListAdap
 
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    fun deleteItem(position: Int){
+        clickListener.onDelete(getItem(position))
+        val newList = currentList.toMutableList()
+        newList.removeAt(position)
+        submitList(newList)
+
+    }
+    fun checkItem(position: Int) {
+        val item = getItem(position)
+        item.isDone = !item.isDone
+        clickListener.onCheck(item)
+        val newList = currentList.toMutableList()
+        newList[position] = item
+        submitList(newList)
+        notifyItemChanged(position)
     }
 
     inner class TasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -95,7 +113,6 @@ class TasksListAdapter(val clickListener: TasksListItemClickListener) : ListAdap
 
 
         }
-
 
     }
 

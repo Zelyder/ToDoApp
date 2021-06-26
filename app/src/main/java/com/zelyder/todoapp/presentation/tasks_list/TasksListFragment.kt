@@ -7,17 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zelyder.todoapp.R
 import com.zelyder.todoapp.data.DataSource
 import com.zelyder.todoapp.domain.models.Task
+import com.zelyder.todoapp.presentation.core.SwipeGesture
 
 class TasksListFragment : Fragment(), TasksListItemClickListener {
 
     var recyclerView: RecyclerView? = null
     var visibilityImg: ImageView? = null
-    var isHided: Boolean = false
+    var isHided: Boolean = true
 
     private val removedTasks = mutableListOf<Task>()
 
@@ -37,9 +39,15 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
             layoutManager = LinearLayoutManager(view.context)
             setAdapter(adapter)
         }
-        val data = DataSource.getData()
-        data.forEach { if(it.isDone) removedTasks.add(it) }
-        adapter.submitList(data)
+        val itemTouchHelper = ItemTouchHelper(SwipeGesture(adapter, requireContext()))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+        if(adapter.currentList.isEmpty()) {
+            val data = DataSource.getData()
+            data.forEach { if(it.isDone) removedTasks.add(it) }
+            adapter.submitList(data.filter { !it.isDone })
+        }
+
 
         visibilityImg = view.findViewById(R.id.visibilityImg)
 
@@ -68,5 +76,11 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
 
     override fun onItemClick(task: Task) {
         findNavController().navigate(R.id.action_TasksListFragment_to_EditTaskFragment)
+    }
+
+    override fun onDelete(task: Task) {
+        if(task.isDone){
+            removedTasks.remove(task)
+        }
     }
 }
