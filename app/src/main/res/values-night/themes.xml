@@ -4,8 +4,8 @@
         <!--selection controls.-->
         <item name="colorPrimary">@color/blue_700</item>
         <item name="colorPrimaryVariant">@color/blue_500</item>
-        <item name="colorSecondary">@color/green_light</item>
-        <item name="colorSecondaryVariant">@color/green_dark</item>
+        <item name="colorSecondary">@color/blue_700</item>
+        <item name="colorSecondaryVariant">@color/blue_500</item>
 
         <!--text fields.-->
         <item name="android:colorBackground">@color/black_dark_primary</item>
@@ -16,7 +16,7 @@
 
         <!--on which they appear.-->
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorOnSecondary">@color/black_60</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="colorOnBackground">@color/white</item>
         <item name="colorOnSurface">@color/white_60</item>
         <item name="colorOnError">@color/white</item>

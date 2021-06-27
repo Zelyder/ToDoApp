@@ -13,6 +13,15 @@
         <action
             android:id="@+id/action_TasksListFragment_to_EditTaskFragment"
             app:destination="@id/EditTaskFragment" />
+        <argument
+            android:name="editScreenExitStatus"
+            app:argType="com.zelyder.todoapp.domain.enums.EditScreenExitStatus"
+            android:defaultValue="NONE" />
+        <argument
+            android:name="taskFromEditScreen"
+            app:argType="com.zelyder.todoapp.domain.models.Task"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/EditTaskFragment"
@@ -21,6 +30,17 @@
         tools:layout="@layout/fragment_edit_task">
         <action
             android:id="@+id/action_EditTaskFragment_to_TasksListFragment"
-            app:destination="@id/TasksListFragment" />
+            app:destination="@id/TasksListFragment"
+            app:popUpTo="@id/TasksListFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="isNewTask"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="task"
+            app:argType="com.zelyder.todoapp.domain.models.Task"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>

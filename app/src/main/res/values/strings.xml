@@ -11,5 +11,13 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="app_title">Мои дела</string>
     <string name="done_n">Выполнено — %d</string>
+    <string name="save">Сохранить</string>
     <string name="textview">TextView TextView TextView TextView TextView\n TextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\nTextView TextView TextView TextView TextView\n</string>
+    <string name="new_task_hint">Что надо сделать…</string>
+    <string name="importance">Важность</string>
+    <string name="importance_no">Нет</string>
+    <string name="importance_low">Низкий</string>
+    <string name="importance_high">!! Высокий</string>
+    <string name="deadline_title">Сделать до</string>
+    <string name="delete">Удалить</string>
 </resources>

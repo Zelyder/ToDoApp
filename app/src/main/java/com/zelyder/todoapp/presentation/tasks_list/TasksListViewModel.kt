@@ -16,10 +16,12 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
     val isHided: LiveData<Boolean> get() = _isHided
 
     fun updateList() {
-        val data = tasksListRepository.getTasks()
-        _uncheckedTasks.value = data.filter { !it.isDone }
-        _checkedTasks.value = data.filter { it.isDone }
-        _tasks.value = _uncheckedTasks.value
+        if (_tasks.value.isNullOrEmpty()) {
+            val data = tasksListRepository.getTasks()
+            _uncheckedTasks.value = data.filter { !it.isDone }
+            _checkedTasks.value = data.filter { it.isDone }
+            _tasks.value = _uncheckedTasks.value
+        }
     }
 
     fun toggleVisibility() {
@@ -64,6 +66,33 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
         } else {
             val newUncheckedList = _uncheckedTasks.value?.toMutableList()
             newUncheckedList?.remove(task)
+            _uncheckedTasks.value = newUncheckedList
+        }
+    }
+
+    fun addTask(task: Task) {
+        val newUncheckedList = _uncheckedTasks.value?.toMutableList()
+        newUncheckedList?.add(task)
+        _uncheckedTasks.value = newUncheckedList
+
+    }
+
+    fun editTask(task: Task) {
+        if (task.isDone) {
+            val newCheckedList = _checkedTasks.value?.toMutableList()
+            newCheckedList?.find { it.id == task.id }?.apply {
+                text = task.text
+                importance = task.importance
+                dateTime = task.dateTime
+            }
+            _checkedTasks.value = newCheckedList
+        } else {
+            val newUncheckedList = _uncheckedTasks.value?.toMutableList()
+            newUncheckedList?.find { it.id == task.id }?.apply {
+                text = task.text
+                importance = task.importance
+                dateTime = task.dateTime
+            }
             _uncheckedTasks.value = newUncheckedList
         }
     }

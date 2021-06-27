@@ -9,20 +9,27 @@ import android.widget.ImageView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.zelyder.todoapp.MyApp
 import com.zelyder.todoapp.R
-import com.zelyder.todoapp.data.DataSource
+import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.models.Task
+import com.zelyder.todoapp.presentation.edit_task.EditTaskFragmentArgs
 import com.zelyder.todoapp.viewModelFactoryProvider
+import java.lang.IllegalArgumentException
 
 class TasksListFragment : Fragment(), TasksListItemClickListener {
     private val viewModel: TasksListViewModel by viewModels { viewModelFactoryProvider().viewModelFactory() }
 
     var recyclerView: RecyclerView? = null
     var visibilityImg: ImageView? = null
+
+    private val args: TasksListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +50,14 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
         val itemTouchHelper = ItemTouchHelper(SwipeGesture(adapter, requireContext()))
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
+        view.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+            findNavController().navigate(
+                TasksListFragmentDirections.actionTasksListFragmentToEditTaskFragment(
+                    true
+                )
+            )
+        }
+
         viewModel.tasks.observe(viewLifecycleOwner) { tasks ->
             adapter.submitList(tasks)
         }
@@ -54,14 +69,36 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
                 visibilityImg?.setImageResource(R.drawable.ic_visibility_on)
             }
         }
-
-        viewModel.updateList()
+        if (savedInstanceState == null) {
+            viewModel.updateList()
+        }
 
         visibilityImg = view.findViewById(R.id.visibilityImg)
 
         visibilityImg?.setOnClickListener {
             viewModel.toggleVisibility()
         }
+
+        if(args.editScreenExitStatus != EditScreenExitStatus.NONE){
+            when(args.editScreenExitStatus) {
+                EditScreenExitStatus.EDIT -> args.taskFromEditScreen?.let {
+                    viewModel.editTask(it)
+                }
+                EditScreenExitStatus.ADD -> args.taskFromEditScreen?.let {
+                    viewModel.addTask(it)
+                }
+                EditScreenExitStatus.DELETE -> args.taskFromEditScreen?.let {
+                    viewModel.deleteTask(it)
+                }
+                else -> throw IllegalArgumentException()
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recyclerView = null
+        visibilityImg = null
     }
 
     override fun onCheck(task: Task) {
@@ -69,7 +106,11 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
     }
 
     override fun onItemClick(task: Task) {
-        findNavController().navigate(R.id.action_TasksListFragment_to_EditTaskFragment)
+        findNavController().navigate(
+            TasksListFragmentDirections.actionTasksListFragmentToEditTaskFragment(
+                false, task
+            )
+        )
     }
 
     override fun onDelete(task: Task) {

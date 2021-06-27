@@ -5,8 +5,8 @@
         <!--selection controls.-->
         <item name="colorPrimary">@color/blue_700</item>
         <item name="colorPrimaryVariant">@color/blue_500</item>
-        <item name="colorSecondary">@color/green_light</item>
-        <item name="colorSecondaryVariant">@color/green_dark</item>
+        <item name="colorSecondary">@color/blue_700</item>
+        <item name="colorSecondaryVariant">@color/blue_500</item>
 
         <!--text fields.-->
         <item name="android:colorBackground">@color/white_200</item>
@@ -18,7 +18,7 @@
 
         <!--on which they appear.-->
         <item name="colorOnPrimary">@color/black</item>
-        <item name="colorOnSecondary">@color/black_60</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="colorOnBackground">@color/black</item>
         <item name="colorOnSurface">@color/black</item>
         <item name="colorOnError">@color/white</item>
@@ -68,6 +68,11 @@
     </style>
 
     <style name="Theme.ToDoApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">@color/green_light</item>
+        <item name="android:textColorSecondary">@color/gray</item>
+    </style>
 
 
 </resources>
