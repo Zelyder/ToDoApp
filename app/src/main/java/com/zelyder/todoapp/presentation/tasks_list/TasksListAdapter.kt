@@ -1,9 +1,7 @@
 package com.zelyder.todoapp.presentation.tasks_list
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.Paint
-import android.os.Build
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +10,6 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.widget.CompoundButtonCompat
-import androidx.core.widget.TintableCompoundButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,8 +17,6 @@ import com.zelyder.todoapp.R
 import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.presentation.core.isOverdue
-import kotlinx.coroutines.channels.consumesAll
-import java.util.ArrayList
 
 class TasksListAdapter(val clickListener: TasksListItemClickListener) : ListAdapter<Task, TasksListAdapter.TasksViewHolder>(TASKS_COMPARATOR) {
 
@@ -84,7 +78,7 @@ class TasksListAdapter(val clickListener: TasksListItemClickListener) : ListAdap
             itemView.setOnClickListener {
                 clickListener.onItemClick(task)
             }
-            task.dateTime?.let {
+            task.date?.let {
                 if(isOverdue(it)) {
                     val iconsColorStates = ColorStateList(arrayOf(intArrayOf(-android.R.attr.state_selected)),
                         intArrayOf(ContextCompat.getColor(itemView.context, R.color.red_light)))
@@ -107,10 +101,10 @@ class TasksListAdapter(val clickListener: TasksListItemClickListener) : ListAdap
             }
 
             textView.text = task.text
-            if (task.dateTime == null) {
+            if (task.date == null) {
                 dateTimeText.visibility = View.GONE
             } else {
-                dateTimeText.text = task.dateTime
+                dateTimeText.text = task.date
                 dateTimeText.visibility = View.VISIBLE
             }
             val drawable = when (task.importance) {

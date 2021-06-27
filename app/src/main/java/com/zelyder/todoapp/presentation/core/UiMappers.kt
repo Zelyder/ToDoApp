@@ -25,6 +25,25 @@ fun formatDate(day: Int, month: Int, year: Int): String {
 }
 
 fun isOverdue(date: String): Boolean {
+    val dates = getDatesInMillis(date)
+    return dates.first < dates.second
+}
+
+fun isToday(date: String): Boolean {
+    val calendar = Calendar.getInstance()
+    val nowDay = calendar.get(Calendar.DAY_OF_MONTH)
+    val nowMonth = calendar.get(Calendar.MONTH) +1
+    val nowYear = calendar.get(Calendar.YEAR)
+
+    val arr = date.split(" ")
+    val day = arr[0].toInt()
+    val month = fromMonthToInt(arr[1])
+    val year = arr[2].toInt()
+
+    return nowDay == day && nowMonth == month && nowYear == year
+}
+
+private fun getDatesInMillis(date: String): Pair<Long, Long> {
     val calendar = Calendar.getInstance()
     val nowDay = calendar.get(Calendar.DAY_OF_MONTH)
     val nowMonth = calendar.get(Calendar.MONTH) +1
@@ -43,8 +62,7 @@ fun isOverdue(date: String): Boolean {
         set(year, month, day)
         timeInMillis
     }
-
-    return dateInMillis < nowInMillis
+    return Pair(dateInMillis, nowInMillis)
 }
 
 fun fromMonthToInt(month: String): Int = when(month) {

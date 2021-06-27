@@ -12,7 +12,7 @@ data class Task(
     var text: String,
     var isDone: Boolean = false,
     var importance: Importance = Importance.NONE,
-    var dateTime: String? = null
+    var date: String? = null
 ): Parcelable {
     init {
         countTasks++

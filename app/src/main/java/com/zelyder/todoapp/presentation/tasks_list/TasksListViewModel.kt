@@ -92,7 +92,7 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
             newCheckedList?.find { it.id == task.id }?.apply {
                 text = task.text
                 importance = task.importance
-                dateTime = task.dateTime
+                date = task.date
             }
             _checkedTasks.value = newCheckedList
         } else {
@@ -100,7 +100,7 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
             newUncheckedList?.find { it.id == task.id }?.apply {
                 text = task.text
                 importance = task.importance
-                dateTime = task.dateTime
+                date = task.date
             }
             _uncheckedTasks.value = newUncheckedList
         }

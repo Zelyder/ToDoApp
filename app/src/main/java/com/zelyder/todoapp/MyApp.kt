@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import com.zelyder.todoapp.domain.repositories.TasksListRepository
 import com.zelyder.todoapp.domain.repositories.TasksListRepositoryImpl
+import com.zelyder.todoapp.presentation.background.ReminderWorker
 import com.zelyder.todoapp.presentation.core.ViewModelFactory
 import com.zelyder.todoapp.presentation.core.ViewModelFactoryProvider
 
@@ -16,6 +17,8 @@ class MyApp: Application(), ViewModelFactoryProvider {
         super.onCreate()
 
         initRepositories()
+
+        ReminderWorker.startWork(applicationContext, tasksListRepository)
 
         viewModelFactory = ViewModelFactory(tasksListRepository)
     }

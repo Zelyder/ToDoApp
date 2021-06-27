@@ -2,7 +2,6 @@ package com.zelyder.todoapp.data
 
 import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.models.Task
-import java.time.LocalDate
 
 
 val initTasks =  listOf(
@@ -12,11 +11,11 @@ val initTasks =  listOf(
     Task(3, "Купить что-то", importance = Importance.HIGH),
     Task(4, "Купить что-то", importance = Importance.LOW),
     Task(5, "Купить что-то", isDone = true),
-    Task(6, "Купить что-то"),
-    Task(7, "Купить что-то", dateTime = "2 июня 2021"),
-    Task(8, "Купить что-то"),
-    Task(9, "Купить что-то"),
-    Task(10, "Купить что-то", dateTime = "30 июня 2021"),
+    Task(6, "Купить что-то", date = "27 июля 2021"),
+    Task(7, "Купить что-то", date = "2 июня 2021"),
+    Task(8, "Сдать первое ДЗ", date = "27 июня 2021"),
+    Task(9, "Хорошенько выспаться", date = "28 июня 2021"),
+    Task(10, "Купить что-то", date = "30 июня 2021"),
     Task(11, "Купить что-то", isDone = true),
     Task(12, "Купить что-то"),
     Task(13, "Купить что-то"),

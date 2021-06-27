@@ -20,4 +20,8 @@
     <string name="importance_high">!! Высокий</string>
     <string name="deadline_title">Сделать до</string>
     <string name="delete">Удалить</string>
+    <string name="notification_text">Сегодня вам нужно сделать %d задач</string>
+    <string name="notification_description">Не забудьте )</string>
+    <string name="reminder_channel_name">Канал напоминаний</string>
+    <string name="reminder_channel_description">Напоминает о задачах на сегодня</string>
 </resources>

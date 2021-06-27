@@ -94,11 +94,11 @@ class EditTaskFragment : Fragment() {
 
         viewModel.deadline.observe(viewLifecycleOwner) {
             if (it != null) {
-                task.dateTime = it
+                task.date = it
                 deadlineText?.text = it
                 deadlineSwitch?.isChecked = true
             } else {
-                task.dateTime = null
+                task.date = null
                 deadlineText?.text = ""
                 deadlineSwitch?.isChecked = false
             }
@@ -108,8 +108,8 @@ class EditTaskFragment : Fragment() {
             task = args.task!!
             editText?.setText(task.text)
             viewModel.setImportance(task.importance)
-            if (task.dateTime != null) {
-                viewModel.setDeadline(task.dateTime)
+            if (task.date != null) {
+                viewModel.setDeadline(task.date)
             }
         } else {
             task = Task(text = "")
