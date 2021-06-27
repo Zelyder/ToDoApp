@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -24,6 +25,7 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
 
     var recyclerView: RecyclerView? = null
     var visibilityImg: ImageView? = null
+    var tvDoneCount: TextView? = null
 
     private val args: TasksListFragmentArgs by navArgs()
 
@@ -38,6 +40,9 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = TasksListAdapter(this)
+
+        tvDoneCount = view.findViewById(R.id.tvDoneCount)
+
         recyclerView = view.findViewById<RecyclerView>(R.id.rvTasksList).apply {
             layoutManager = LinearLayoutManager(view.context)
             setAdapter(adapter)
@@ -63,6 +68,10 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
             } else {
                 visibilityImg?.setImageResource(R.drawable.ic_visibility_on)
             }
+        }
+
+        viewModel.doneCount.observe(viewLifecycleOwner) {
+            tvDoneCount?.text = resources.getString(R.string.done_n, it)
         }
         if (savedInstanceState == null) {
             viewModel.updateList()

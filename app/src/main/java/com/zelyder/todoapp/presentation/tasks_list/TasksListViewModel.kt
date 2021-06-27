@@ -11,15 +11,18 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
     private val _isHided = MutableLiveData(true)
     private val _checkedTasks = MutableLiveData<List<Task>>()
     private val _uncheckedTasks = MutableLiveData<List<Task>>()
+    private val _doneCount = MutableLiveData<Int>()
 
     val tasks: LiveData<List<Task>> get() = _tasks
     val isHided: LiveData<Boolean> get() = _isHided
+    val doneCount: LiveData<Int> get() = _doneCount
 
     fun updateList() {
         if (_tasks.value.isNullOrEmpty()) {
             val data = tasksListRepository.getTasks()
             _uncheckedTasks.value = data.filter { !it.isDone }
             _checkedTasks.value = data.filter { it.isDone }
+            _doneCount.value = _checkedTasks.value?.size
             _tasks.value = _uncheckedTasks.value
         }
     }
@@ -47,6 +50,8 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
             val newUncheckedList = _uncheckedTasks.value?.toMutableList()
             newUncheckedList?.remove(task)
             _uncheckedTasks.value = newUncheckedList
+
+            _doneCount.value = _checkedTasks.value?.size
         } else {
             val newCheckedList = _checkedTasks.value?.toMutableList()
             newCheckedList?.remove(task)
@@ -55,6 +60,8 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
             val newUncheckedList = _uncheckedTasks.value?.toMutableList()
             newUncheckedList?.add(task)
             _uncheckedTasks.value = newUncheckedList
+
+            _doneCount.value = _checkedTasks.value?.size
         }
     }
 
@@ -63,6 +70,8 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
             val newCheckedList = _checkedTasks.value?.toMutableList()
             newCheckedList?.remove(task)
             _checkedTasks.value = newCheckedList
+
+            _doneCount.value = _checkedTasks.value?.size
         } else {
             val newUncheckedList = _uncheckedTasks.value?.toMutableList()
             newUncheckedList?.remove(task)

@@ -1,9 +1,6 @@
 package com.zelyder.todoapp.presentation.edit_task
 
-import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,10 +19,6 @@ import com.zelyder.todoapp.presentation.core.Dialogs
 import com.zelyder.todoapp.presentation.core.formatDate
 import com.zelyder.todoapp.viewModelFactoryProvider
 
-
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class EditTaskFragment : Fragment() {
 
     private var imgClose: ImageView? = null
