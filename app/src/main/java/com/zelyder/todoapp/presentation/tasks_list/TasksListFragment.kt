@@ -1,27 +1,23 @@
 package com.zelyder.todoapp.presentation.tasks_list
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.zelyder.todoapp.MyApp
 import com.zelyder.todoapp.R
 import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.models.Task
-import com.zelyder.todoapp.presentation.edit_task.EditTaskFragmentArgs
 import com.zelyder.todoapp.viewModelFactoryProvider
-import java.lang.IllegalArgumentException
 
 class TasksListFragment : Fragment(), TasksListItemClickListener {
     private val viewModel: TasksListViewModel by viewModels { viewModelFactoryProvider().viewModelFactory() }
@@ -41,7 +37,6 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val adapter = TasksListAdapter(this)
         recyclerView = view.findViewById<RecyclerView>(R.id.rvTasksList).apply {
             layoutManager = LinearLayoutManager(view.context)
@@ -77,6 +72,10 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
 
         visibilityImg?.setOnClickListener {
             viewModel.toggleVisibility()
+        }
+
+        view.findViewById<AppBarLayout>(R.id.tasks_list_appbar).setOnClickListener {
+            recyclerView?.scrollToPosition(0)
         }
 
         if(args.editScreenExitStatus != EditScreenExitStatus.NONE){

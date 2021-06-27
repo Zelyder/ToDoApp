@@ -6,69 +6,74 @@
     android:layout_height="match_parent"
     tools:context=".presentation.tasks_list.TasksListFragment">
 
-        <com.google.android.material.appbar.AppBarLayout
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/tasks_list_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:theme="@style/Theme.ToDoApp.AppBarOverlay">
+
+
+        <com.zelyder.todoapp.presentation.tasks_list.CollapsibleToolbar
+            android:id="@+id/tasks_list_motion_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/Theme.ToDoApp.AppBarOverlay">
+            android:layout_height="match_parent"
+            android:minHeight="65dp"
+            android:fitsSystemWindows="false"
+            app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed"
+            app:layoutDescription="@xml/fragment_tasks_list_xml_constraintlayout_scene">
 
-                <com.google.android.material.appbar.CollapsingToolbarLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="60dp"
-                            android:layout_marginTop="50dp"
-                            android:layout_marginEnd="24dp"
-                            android:layout_marginBottom="16dp"
-                            android:orientation="vertical">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="50dp"
+                android:text="@string/app_title"
+                android:textAppearance="@style/TextAppearance.MyTheme.LargeTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/app_title"
-                                    android:textAppearance="@style/TextAppearance.MyTheme.LargeTitle" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="@string/done_n"
+                android:textAppearance="@style/TextAppearance.MyTheme.Body1"
+                android:textColor="?attr/label_tertiary"
+                app:layout_constraintEnd_toStartOf="@+id/visibilityImg"
+                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/visibilityImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:src="@drawable/ic_visibility_on"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                tools:ignore="ContentDescription" />
 
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:text="@string/done_n"
-                                            android:textAppearance="@style/TextAppearance.MyTheme.Body1"
-                                            android:textColor="?attr/label_tertiary" />
 
-                                        <ImageView
-                                            android:id="@+id/visibilityImg"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="16dp"
-                                            android:src="@drawable/ic_visibility_on"
-                                            tools:ignore="ContentDescription" />
-                                </LinearLayout>
-                        </LinearLayout>
+        </com.zelyder.todoapp.presentation.tasks_list.CollapsibleToolbar>
 
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
+    <include
+        layout="@layout/content_tasks_list"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <include
-            layout="@layout/content_tasks_list"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_add"
-            tools:ignore="ContentDescription" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_add"
+        tools:ignore="ContentDescription" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
