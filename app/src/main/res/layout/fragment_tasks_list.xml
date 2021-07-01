@@ -63,9 +63,14 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include
-        layout="@layout/content_tasks_list"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <androidx.core.widget.NestedScrollView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include
+            layout="@layout/content_tasks_list" />
+    </androidx.core.widget.NestedScrollView>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

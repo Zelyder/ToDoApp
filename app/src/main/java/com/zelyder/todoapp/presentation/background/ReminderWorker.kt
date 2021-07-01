@@ -25,9 +25,6 @@ class ReminderWorker(val context: Context, params: WorkerParameters) :
         private lateinit var tasksListRepository: TasksListRepository
         private var countTasksToDo: Int? = null
 
-        private val constraints = Constraints.Builder()
-            .build()
-
         private val request =
             PeriodicWorkRequest.Builder(
                 ReminderWorker::class.java,
@@ -35,7 +32,6 @@ class ReminderWorker(val context: Context, params: WorkerParameters) :
                 TimeUnit.HOURS
             )
                 .addTag(TAG)
-                .setConstraints(constraints)
                 .build()
 
         fun startWork(context: Context, _tasksListRepository: TasksListRepository) {

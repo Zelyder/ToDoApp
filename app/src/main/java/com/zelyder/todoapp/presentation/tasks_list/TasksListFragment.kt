@@ -84,7 +84,7 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
         }
 
         view.findViewById<AppBarLayout>(R.id.tasks_list_appbar).setOnClickListener {
-            recyclerView?.scrollToPosition(0)
+            recyclerView?.smoothScrollToPosition(0)
         }
 
         if(args.editScreenExitStatus != EditScreenExitStatus.NONE){
