@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="support_separator" format="color" />
+    <attr name="support_overlay" format="color" />
+
+    <attr name="label_primary" format="color" />
+    <attr name="label_secondary" format="color" />
+    <attr name="label_tertiary" format="color" />
+    <attr name="label_disable" format="color" />
+</resources>
