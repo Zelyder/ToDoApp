@@ -64,11 +64,21 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <include
-            layout="@layout/content_tasks_list" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include
+                layout="@layout/content_tasks_list" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="34dp" />
+        </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
 

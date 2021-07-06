@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -26,6 +27,7 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
     var recyclerView: RecyclerView? = null
     var visibilityImg: ImageView? = null
     var tvDoneCount: TextView? = null
+    var nestedScrollView: NestedScrollView? = null
 
     private val args: TasksListFragmentArgs by navArgs()
 
@@ -42,9 +44,11 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
         val adapter = TasksListAdapter(this)
 
         tvDoneCount = view.findViewById(R.id.tvDoneCount)
+        nestedScrollView = view.findViewById(R.id.nestedScrollView)
 
+        val rvLayoutManager = LinearLayoutManager(view.context)
         recyclerView = view.findViewById<RecyclerView>(R.id.rvTasksList).apply {
-            layoutManager = LinearLayoutManager(view.context)
+            layoutManager = rvLayoutManager
             setAdapter(adapter)
         }
         val itemTouchHelper = ItemTouchHelper(SwipeGesture(adapter, requireContext()))
@@ -84,7 +88,7 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
         }
 
         view.findViewById<AppBarLayout>(R.id.tasks_list_appbar).setOnClickListener {
-            recyclerView?.smoothScrollToPosition(0)
+            nestedScrollView?.fullScroll(View.FOCUS_UP)
         }
 
         if(args.editScreenExitStatus != EditScreenExitStatus.NONE){
@@ -107,6 +111,8 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
         super.onDestroyView()
         recyclerView = null
         visibilityImg = null
+        tvDoneCount = null
+        nestedScrollView = null
     }
 
     override fun onCheck(task: Task) {

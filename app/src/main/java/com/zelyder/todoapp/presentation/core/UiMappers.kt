@@ -1,12 +1,10 @@
 package com.zelyder.todoapp.presentation.core
 
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
+import kotlin.math.abs
 
 fun formatDate(day: Int, month: Int, year: Int): String {
-    val fullMonth = when(month) {
+    val fullMonth = when (month) {
         1 -> "января"
         2 -> "февраля"
         3 -> "матра"
@@ -32,7 +30,7 @@ fun isOverdue(date: String): Boolean {
 fun isToday(date: String): Boolean {
     val calendar = Calendar.getInstance()
     val nowDay = calendar.get(Calendar.DAY_OF_MONTH)
-    val nowMonth = calendar.get(Calendar.MONTH) +1
+    val nowMonth = calendar.get(Calendar.MONTH) + 1
     val nowYear = calendar.get(Calendar.YEAR)
 
     val arr = date.split(" ")
@@ -43,10 +41,34 @@ fun isToday(date: String): Boolean {
     return nowDay == day && nowMonth == month && nowYear == year
 }
 
+fun calculateTimeDiffInMillis(hourOfDay: Int, minute: Int): Long {
+    val calendar = Calendar.getInstance()
+    val nowDay = calendar.get(Calendar.DAY_OF_MONTH)
+    val nowMonth = calendar.get(Calendar.MONTH)
+    val nowYear = calendar.get(Calendar.YEAR)
+    val nowHour = calendar.get(Calendar.HOUR_OF_DAY)
+    val nowMinute = calendar.get(Calendar.MINUTE)
+
+
+    val nowInMillis: Long = Calendar.getInstance().run {
+        set(nowYear, nowMonth, nowDay, nowHour, nowMinute)
+        timeInMillis
+    }
+    val dateInMillis: Long = Calendar.getInstance().run {
+        set(
+            nowYear, nowMonth,
+            nowDay ,
+            hourOfDay, minute
+        )
+        if (nowHour * 60 + nowMinute >= hourOfDay * 60 + minute) timeInMillis + 24*3600*1000 else timeInMillis
+    }
+    return abs(dateInMillis - nowInMillis)
+}
+
 private fun getDatesInMillis(date: String): Pair<Long, Long> {
     val calendar = Calendar.getInstance()
     val nowDay = calendar.get(Calendar.DAY_OF_MONTH)
-    val nowMonth = calendar.get(Calendar.MONTH) +1
+    val nowMonth = calendar.get(Calendar.MONTH) + 1
     val nowYear = calendar.get(Calendar.YEAR)
 
     val arr = date.split(" ")
@@ -65,7 +87,7 @@ private fun getDatesInMillis(date: String): Pair<Long, Long> {
     return Pair(dateInMillis, nowInMillis)
 }
 
-fun fromMonthToInt(month: String): Int = when(month) {
+fun fromMonthToInt(month: String): Int = when (month) {
     "января" -> 1
     "февраля" -> 2
     "матра" -> 3

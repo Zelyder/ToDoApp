@@ -4,7 +4,13 @@ package com.zelyder.todoapp.presentation.core
 import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.DatePicker
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.CalendarConstraints.DateValidator
+import com.google.android.material.datepicker.CompositeDateValidator
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.*
+
 
 class Dialogs : DatePickerDialog.OnDateSetListener {
 
@@ -25,10 +31,13 @@ class Dialogs : DatePickerDialog.OnDateSetListener {
     fun openDatePicker(context: Context, doAfterDateSet: () -> Unit) {
         getDateCalendar()
         _doAfterDateSet = doAfterDateSet
-        DatePickerDialog(context, this, year, month, day).show()
+        val datePicker = DatePickerDialog(context, this, year, month, day)
+        datePicker.datePicker.minDate = Calendar.getInstance().timeInMillis
+        datePicker.show()
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+
         savedDay = dayOfMonth
         savedMonth = month
         savedYear = year

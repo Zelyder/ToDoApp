@@ -31,6 +31,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="start|top"
                 android:hint="@string/new_task_hint"
+                android:minHeight="100dp"
                 android:inputType="textMultiLine"
                 android:textAppearance="@style/TextAppearance.MyTheme.Body2" />
         </androidx.cardview.widget.CardView>
@@ -105,8 +106,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/delete"
             android:textColor="?attr/colorError"
-            app:drawableStartCompat="@drawable/ic_delete"
-            app:drawableTint="?attr/colorError" />
+            app:drawableStartCompat="@drawable/ic_delete" />
 
     </LinearLayout>
 

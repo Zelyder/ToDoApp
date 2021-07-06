@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,6 +19,7 @@ import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.presentation.core.Dialogs
 import com.zelyder.todoapp.presentation.core.formatDate
 import com.zelyder.todoapp.viewModelFactoryProvider
+
 
 class EditTaskFragment : Fragment() {
 
@@ -57,6 +59,8 @@ class EditTaskFragment : Fragment() {
         deadlineSwitch = view.findViewById(R.id.edit_task_deadline_switch)
         tvDelete = view.findViewById(R.id.edit_task_tv_delete)
 
+        var tintColor = ContextCompat.getColor(requireContext(), R.color.red_light)
+
         viewModel.importance.observe(viewLifecycleOwner) {
             task.importance = it
             when (it) {
@@ -89,6 +93,7 @@ class EditTaskFragment : Fragment() {
                         )
                     )
                 }
+                else -> throw IllegalArgumentException()
             }
         }
 
@@ -113,7 +118,9 @@ class EditTaskFragment : Fragment() {
             }
         } else {
             task = Task(text = "")
-            tvDelete?.isActivated = false
+            tvDelete?.isEnabled = false
+
+            tintColor = ContextCompat.getColor(requireContext(), R.color.gray)
             tvDelete?.setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
@@ -122,10 +129,16 @@ class EditTaskFragment : Fragment() {
             )
         }
 
+        var drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)
+        drawable = DrawableCompat.wrap(drawable!!)
+        DrawableCompat.setTint(drawable.mutate(), tintColor)
+        drawable.setBounds( 0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        tvDelete?.setCompoundDrawables(drawable, null, null, null)
+
         importanceLayout?.setOnClickListener {
             val popupView = LayoutInflater.from(requireContext()).inflate(
                 R.layout.popup_importance,
-                null,
+                importanceLayout,
                 false
             )
 
