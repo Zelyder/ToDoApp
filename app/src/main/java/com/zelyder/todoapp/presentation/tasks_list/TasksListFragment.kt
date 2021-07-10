@@ -119,6 +119,10 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
         viewModel.checkTask(task)
     }
 
+    override fun onEdit(task: Task) {
+        viewModel.editTask(task)
+    }
+
     override fun onItemClick(task: Task) {
         findNavController().navigate(
             TasksListFragmentDirections.actionTasksListFragmentToEditTaskFragment(

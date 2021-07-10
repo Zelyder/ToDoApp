@@ -4,11 +4,6 @@ package com.zelyder.todoapp.presentation.core
 import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.DatePicker
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.CalendarConstraints.DateValidator
-import com.google.android.material.datepicker.CompositeDateValidator
-import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.*
 
 

@@ -17,8 +17,9 @@ import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.presentation.core.Dialogs
-import com.zelyder.todoapp.presentation.core.formatDate
+import com.zelyder.todoapp.presentation.core.toDate
 import com.zelyder.todoapp.viewModelFactoryProvider
+import java.util.*
 
 
 class EditTaskFragment : Fragment() {
@@ -220,11 +221,10 @@ class EditTaskFragment : Fragment() {
         val dialogs = Dialogs()
         dialogs.openDatePicker(requireContext()) {
             viewModel.setDeadline(
-                formatDate(
-                    dialogs.savedDay,
-                    dialogs.savedMonth + 1,
-                    dialogs.savedYear
-                )
+                Calendar.getInstance().run {
+                    set(dialogs.savedYear, dialogs.savedMonth, dialogs.savedDay)
+                    timeInMillis
+                }.toDate()
             )
         }
     }

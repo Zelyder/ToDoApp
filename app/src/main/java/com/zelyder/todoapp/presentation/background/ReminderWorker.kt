@@ -43,7 +43,7 @@ class ReminderWorker(val context: Context, params: WorkerParameters) :
             WorkManager.getInstance(context).enqueueUniqueWork(REMINDER_TAG, ExistingWorkPolicy.REPLACE, request)
         }
 
-        private fun updateData() {
+        private suspend fun updateData() {
             countTasksToDo = tasksListRepository.getCountTodayTasks()
         }
 
