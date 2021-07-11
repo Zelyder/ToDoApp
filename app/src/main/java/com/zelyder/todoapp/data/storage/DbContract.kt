@@ -15,4 +15,10 @@ object DbContract {
         const val COLUMN_NAME_UPDATED_AT = "updated_at"
 
     }
+
+    object DeletedTasks {
+        const val TABLE_NAME = "deleted_tasks"
+
+        const val COLUMN_NAME_ID = "id"
+    }
 }

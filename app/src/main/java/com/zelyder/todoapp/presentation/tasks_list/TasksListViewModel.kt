@@ -1,11 +1,13 @@
 package com.zelyder.todoapp.presentation.tasks_list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.util.Log
+import androidx.lifecycle.*
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.domain.repositories.TasksListRepository
+import com.zelyder.todoapp.presentation.core.NetworkStatusTracker
+import com.zelyder.todoapp.presentation.core.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class TasksListViewModel(private val tasksListRepository: TasksListRepository) : ViewModel() {
@@ -16,6 +18,7 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
     val tasks: LiveData<List<Task>> get() = _tasks
     val isHided: LiveData<Boolean> get() = _isHided
     val doneCount: LiveData<Int> get() = _doneCount
+
 
     fun updateList() {
         viewModelScope.launch {
@@ -43,14 +46,18 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             tasksListRepository.deleteTaskById(task.id)
-            updateList()
+            val newList = tasks.value?.toMutableList()
+            newList?.remove(task)
+            _tasks.value = newList
         }
     }
 
     fun addTask(task: Task) {
         viewModelScope.launch {
             tasksListRepository.addTask(task)
-            updateList()
+            val newList = tasks.value?.toMutableList()
+            newList?.add(task)
+            _tasks.value = newList
         }
     }
 

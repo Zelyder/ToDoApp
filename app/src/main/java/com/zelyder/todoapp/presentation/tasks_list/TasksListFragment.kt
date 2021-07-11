@@ -1,6 +1,7 @@
 package com.zelyder.todoapp.presentation.tasks_list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,11 @@ import com.zelyder.todoapp.R
 import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.viewModelFactoryProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.serialization.ExperimentalSerializationApi
 
+@ExperimentalCoroutinesApi
+@ExperimentalSerializationApi
 class TasksListFragment : Fragment(), TasksListItemClickListener {
     private val viewModel: TasksListViewModel by viewModels { viewModelFactoryProvider().viewModelFactory() }
 

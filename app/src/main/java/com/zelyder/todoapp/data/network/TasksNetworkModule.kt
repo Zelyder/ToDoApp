@@ -30,8 +30,9 @@ class TasksNetworkModule: TasksNetworkClient {
             it.proceed(request)
         }
     )
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
         .build()
 
     private val yandexRetrofit: Retrofit = Retrofit.Builder()

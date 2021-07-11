@@ -1,6 +1,7 @@
 package com.zelyder.todoapp.domain.datasources
 
 import com.zelyder.todoapp.data.storage.db.TasksDb
+import com.zelyder.todoapp.data.storage.entities.DeletedTaskEntity
 import com.zelyder.todoapp.data.storage.entities.TaskEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -36,13 +37,17 @@ class TasksLocalDataSourceImpl(private val tasksDb: TasksDb): TasksLocalDataSour
 
     override suspend fun deleteTask(task: TaskEntity) = withContext(Dispatchers.IO){
         tasksDb.tasksDao().delete(task)
+        tasksDb.deletedTasksDao().insert(DeletedTaskEntity(task.id))
     }
 
     override suspend fun deleteTaskById(taskId: String) = withContext(Dispatchers.IO){
         tasksDb.tasksDao().deleteById(taskId)
+        tasksDb.deletedTasksDao().insert(DeletedTaskEntity(taskId))
     }
 
     override suspend fun deleteAllTasks() = withContext(Dispatchers.IO){
+        val temp = tasksDb.tasksDao().getAll()
         tasksDb.tasksDao().deleteAll()
+        tasksDb.deletedTasksDao().insertAll(temp.map { DeletedTaskEntity(it.id) })
     }
 }
