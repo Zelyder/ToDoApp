@@ -11,6 +11,7 @@ import com.zelyder.todoapp.domain.datasources.TasksYandexDataSourceImpl
 import com.zelyder.todoapp.domain.repositories.TasksListRepository
 import com.zelyder.todoapp.domain.repositories.TasksListRepositoryImpl
 import com.zelyder.todoapp.presentation.background.ReminderWorker
+import com.zelyder.todoapp.presentation.background.UpdateWorker
 import com.zelyder.todoapp.presentation.core.NetworkStatusTracker
 import com.zelyder.todoapp.presentation.core.ViewModelFactory
 import com.zelyder.todoapp.presentation.core.ViewModelFactoryProvider
@@ -31,6 +32,7 @@ class MyApp : Application(), ViewModelFactoryProvider {
 
 
         ReminderWorker.startWork(applicationContext, tasksListRepository)
+        UpdateWorker.startWork(applicationContext, tasksListRepository)
         viewModelFactory = ViewModelFactory(tasksListRepository)
     }
 

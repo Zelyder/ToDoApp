@@ -13,7 +13,6 @@ class ReminderWorker(val context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         return try {
             updateData()
-            Log.d("LOL", "doWork")
             sendNotification(context)
             Result.success()
         } catch (e: Exception) {
