@@ -23,19 +23,16 @@ class NetworkStatusTracker(context: Context) {
             override fun onUnavailable() {
                 super.onUnavailable()
                 offer(NetworkStatus.Unavailable)
-                Log.d("LOL", "onUnavailable")
             }
 
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
                 offer(NetworkStatus.Available)
-                Log.d("LOL","onAvailable")
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
                 offer(NetworkStatus.Unavailable)
-                Log.d("LOL","onLost")
             }
         }
         val request = NetworkRequest.Builder()
@@ -46,15 +43,5 @@ class NetworkStatusTracker(context: Context) {
         awaitClose {
             connectivityManager.unregisterNetworkCallback(networkStatusCallback)
         }
-    }
-}
-
-inline fun <Result> Flow<NetworkStatus>.map (
-    crossinline onUnavailable: suspend () -> Result,
-    crossinline onAvailable: suspend () -> Result
-): Flow<Result> = map {status ->
-    when(status) {
-        NetworkStatus.Unavailable -> onUnavailable()
-        NetworkStatus.Available -> onAvailable()
     }
 }

@@ -1,13 +1,11 @@
 package com.zelyder.todoapp.presentation.tasks_list
 
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.domain.repositories.TasksListRepository
-import com.zelyder.todoapp.presentation.core.NetworkStatusTracker
-import com.zelyder.todoapp.presentation.core.map
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class TasksListViewModel(private val tasksListRepository: TasksListRepository) : ViewModel() {

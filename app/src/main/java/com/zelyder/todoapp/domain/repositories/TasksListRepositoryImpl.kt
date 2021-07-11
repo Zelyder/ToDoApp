@@ -1,14 +1,16 @@
 package com.zelyder.todoapp.domain.repositories
 
 
+import android.util.Log
 import com.zelyder.todoapp.data.mappers.toDto
 import com.zelyder.todoapp.data.mappers.toEntity
 import com.zelyder.todoapp.data.mappers.toTask
-import com.zelyder.todoapp.data.network.api.YandexApi
 import com.zelyder.todoapp.data.network.dto.AddAndDeleteDto
+import com.zelyder.todoapp.data.network.dto.TaskDto
 import com.zelyder.todoapp.domain.datasources.DeletedTasksDataSource
 import com.zelyder.todoapp.domain.datasources.TasksLocalDataSource
 import com.zelyder.todoapp.domain.datasources.TasksYandexDataSource
+import com.zelyder.todoapp.domain.enums.NetworkResult
 import com.zelyder.todoapp.domain.enums.NetworkStatus
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.presentation.core.NetworkStatusTracker
@@ -58,7 +60,8 @@ class TasksListRepositoryImpl(
     override suspend fun setCheckTask(taskId: String, isDone: Boolean) {
         tasksLocalDataSource.setCheckTask(taskId, isDone)
         if (isConnected) {
-            tasksLocalDataSource.getTaskById(taskId)?.toDto()?.let { yandexDataSource.updateTask(it) }
+            tasksLocalDataSource.getTaskById(taskId)?.toDto()
+                ?.let { yandexDataSource.updateTask(it) }
         }
     }
 
@@ -67,7 +70,7 @@ class TasksListRepositoryImpl(
         if (oldTask != null) {
             val newTask = task.toEntity(createdAt = oldTask.createdAt)
             tasksLocalDataSource.updateTask(newTask)
-            if(isConnected) {
+            if (isConnected) {
                 yandexDataSource.updateTask(newTask.toDto())
             }
         }
@@ -86,45 +89,47 @@ class TasksListRepositoryImpl(
     }
 
     suspend fun sync() {
-        val localTasks = tasksLocalDataSource.getTasks()
-        val cloudTasks = yandexDataSource.getTasks()
+        when (val result = yandexDataSource.getTasks()) {
+            is NetworkResult.Success -> {
+                val localTasks = tasksLocalDataSource.getTasks()
+                val cloudTasks = result.data
+                val localTasksSet = localTasks.map { it.id }.toSet()
+                val cloudTasksSet = cloudTasks.map { it.id }.toSet()
 
-        val localTasksSet = localTasks.map { it.id }.toSet()
-        val cloudTasksSet = cloudTasks.map { it.id }.toSet()
+                val diff = localTasksSet - cloudTasksSet
+                val common = localTasksSet.intersect(cloudTasksSet)
 
-        val diff1 = localTasksSet - cloudTasksSet
-        val diff2 = cloudTasksSet - localTasksSet
-        val common = localTasksSet.intersect(cloudTasksSet)
+                val delList = deletedTasksDataSource.getAll().map { it.id }.toSet()
 
-        val delList = deletedTasksDataSource.getAll().map { it.id }.toSet()
+                val newLocalTasks = diff - delList
 
-        val newLocalTasks = diff1 - delList
+                val updateList: MutableList<TaskDto> = mutableListOf()
 
-        if (diff1.isNotEmpty()) {
-            val addAndDeleteDto = AddAndDeleteDto(
-                delList.toList(),
-                localTasks.filter { it.id in newLocalTasks }.map { it.toDto() }
-            )
-            yandexDataSource.updateTasks(addAndDeleteDto)
-            deletedTasksDataSource.clear()
-        }
-
-        if (diff2.isNotEmpty()) {
-            tasksLocalDataSource.saveTasks(cloudTasks.filter { it.id in diff2 }
-                .map { it.toEntity() })
-        }
-
-        if (common.isNotEmpty()) {
-            val localCommon = localTasks.filter { it.id in common }.sortedBy { it.id }
-            val cloudCommon = cloudTasks.filter { it.id in common }.sortedBy { it.id }
-            for (i in common.indices) {
-                if (localCommon[i].updatedAt > cloudCommon[i].updatedAt) {
-                    yandexDataSource.updateTask(localCommon[i].toDto())
-                } else if (localCommon[i].updatedAt < cloudCommon[i].updatedAt) {
-                    tasksLocalDataSource.updateTask(cloudCommon[i].toEntity())
+                if (common.isNotEmpty()) {
+                    val localCommon = localTasks.filter { it.id in common }.sortedBy { it.id }
+                    val cloudCommon = cloudTasks.filter { it.id in common }.sortedBy { it.id }
+                    for (i in common.indices) {
+                        if (localCommon[i].updatedAt > cloudCommon[i].updatedAt) {
+                            updateList.add(localCommon[i].toDto())
+                        } else if (localCommon[i].updatedAt < cloudCommon[i].updatedAt) {
+                            tasksLocalDataSource.updateTask(cloudCommon[i].toEntity())
+                        }
+                    }
+                }
+                val addAndDeleteDto = AddAndDeleteDto(
+                    delList.toList(),
+                    localTasks.filter { it.id in newLocalTasks }.map { it.toDto() } + updateList
+                )
+                val resultNewTasks = yandexDataSource.updateTasks(addAndDeleteDto)
+                if (resultNewTasks is NetworkResult.Success) {
+                    deletedTasksDataSource.clear()
+                    tasksLocalDataSource.deleteAllTasks()
+                    tasksLocalDataSource.saveTasks(resultNewTasks.data.map { it.toEntity() })
+                } else {
+                    Log.d(javaClass.simpleName, "resultNewTasks Error")
                 }
             }
+            is NetworkResult.Error -> Log.d(javaClass.simpleName, "NetworkResult.Error")
         }
-
     }
 }

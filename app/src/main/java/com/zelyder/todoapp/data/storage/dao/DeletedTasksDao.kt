@@ -19,6 +19,6 @@ interface DeletedTasksDao {
     @Delete
     suspend fun delete(task: DeletedTaskEntity)
 
-    @Query("delete from ${DbContract.Tasks.TABLE_NAME}")
+    @Query("delete from ${DbContract.DeletedTasks.TABLE_NAME}")
     suspend fun deleteAll()
 }
