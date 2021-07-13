@@ -23,7 +23,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 class MyApp : Application(), ViewModelFactoryProvider {
     private lateinit var viewModelFactory: ViewModelFactory
     private lateinit var tasksListRepository: TasksListRepository
-    val scope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreate() {
         super.onCreate()
@@ -51,10 +50,6 @@ class MyApp : Application(), ViewModelFactoryProvider {
             yandexDataSource,
             NetworkStatusTracker(applicationContext)
         )
-
-        scope.launch {
-            tasksListRepository.checkInternetAndSync()
-        }
     }
 
 }

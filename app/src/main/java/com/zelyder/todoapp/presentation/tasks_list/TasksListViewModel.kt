@@ -20,7 +20,9 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
 
     fun updateList() {
         viewModelScope.launch {
-            _tasks.value = if (_isHided.value == false) tasksListRepository.getTasks() else tasksListRepository.getTasks().filter { !it.isDone }
+            _tasks.value =
+                if (_isHided.value == false) tasksListRepository.getTasks() else tasksListRepository.getTasks()
+                    .filter { !it.isDone }
             _doneCount.value = tasksListRepository.getCountOfDone()
         }
     }
@@ -62,6 +64,13 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
     fun editTask(task: Task) {
         viewModelScope.launch {
             tasksListRepository.editTask(task)
+            updateList()
+        }
+    }
+
+    fun sync() {
+        viewModelScope.launch {
+            tasksListRepository.checkInternetAndSync()
             updateList()
         }
     }

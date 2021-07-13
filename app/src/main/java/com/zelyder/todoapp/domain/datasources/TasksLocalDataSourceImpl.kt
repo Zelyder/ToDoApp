@@ -46,8 +46,6 @@ class TasksLocalDataSourceImpl(private val tasksDb: TasksDb): TasksLocalDataSour
     }
 
     override suspend fun deleteAllTasks() = withContext(Dispatchers.IO){
-        val temp = tasksDb.tasksDao().getAll()
         tasksDb.tasksDao().deleteAll()
-        tasksDb.deletedTasksDao().insertAll(temp.map { DeletedTaskEntity(it.id) })
     }
 }
