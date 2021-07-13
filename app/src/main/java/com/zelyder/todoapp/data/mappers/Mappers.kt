@@ -32,9 +32,9 @@ fun TaskEntity.toDto() = TaskDto(
     text = text,
     importance = importance.toDtoString(),
     done = isDone,
-    deadline = deadline,
-    createdAt = createdAt,
-    updatedAt = updatedAt
+    deadline = deadline / 1000,
+    createdAt = createdAt / 1000,
+    updatedAt = updatedAt / 1000
 )
 
 fun TaskDto.toEntity() = TaskEntity(
@@ -47,9 +47,9 @@ fun TaskDto.toEntity() = TaskEntity(
          else -> throw IllegalArgumentException("No such importance lvl")
      },
     isDone = done,
-    deadline = deadline ?: 0L,
-    createdAt = createdAt,
-    updatedAt = updatedAt
+    deadline = (deadline ?: 0)  * 1000,
+    createdAt = createdAt * 1000,
+    updatedAt = updatedAt * 1000
 )
 
 fun Importance.toDtoString(): String = when (this) {

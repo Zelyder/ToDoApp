@@ -102,7 +102,7 @@ class TasksListRepositoryImpl(
 
                 val delList = deletedTasksDataSource.getAll().map { it.id }.toSet()
 
-                val newLocalTasks = diff
+                val newLocalTasks = diff - delList
 
                 val updateCloudList: MutableList<TaskDto> = mutableListOf()
                 val updateLocalList: MutableList<TaskEntity> = mutableListOf()
