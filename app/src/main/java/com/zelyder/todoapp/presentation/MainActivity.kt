@@ -7,12 +7,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.zelyder.todoapp.R
+import com.zelyder.todoapp.presentation.core.Notifications
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (savedInstanceState == null) {
+            val notifications = Notifications()
+            notifications.initialize(this)
+            notifications.dismissAll()
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
