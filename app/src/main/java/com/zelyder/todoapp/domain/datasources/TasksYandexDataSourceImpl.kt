@@ -19,12 +19,7 @@ class TasksYandexDataSourceImpl(private val yandexApi: YandexApi) : TasksYandexD
     override suspend fun getTasks(): NetworkResult<List<TaskDto>> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = yandexApi.getTasks()
-                NetworkResult.Success(response)
-            } catch (e: UnknownHostException) {
-                NetworkResult.Error(e)
-            } catch (e: ConnectException) {
-                NetworkResult.Error(e)
+                NetworkResult.Success(yandexApi.getTasks())
             } catch (e: Exception) {
                 NetworkResult.Error(e)
             }
@@ -34,17 +29,8 @@ class TasksYandexDataSourceImpl(private val yandexApi: YandexApi) : TasksYandexD
     override suspend fun sendTask(task: TaskDto): NetworkResult<TaskDto> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = yandexApi.sendTask(task).awaitResponse()
-                if (response.isSuccessful) {
-                    NetworkResult.Success(response.body()!!)
-                } else {
-                    NetworkResult.Error(Exception())
-                }
-            } catch (e: UnknownHostException) {
-                NetworkResult.Error(e)
-            } catch (e: ConnectException) {
-                NetworkResult.Error(e)
-            } catch (e: Exception) {
+                NetworkResult.Success(yandexApi.sendTask(task))
+            }catch (e: Exception) {
                 NetworkResult.Error(e)
             }
         }
@@ -53,16 +39,7 @@ class TasksYandexDataSourceImpl(private val yandexApi: YandexApi) : TasksYandexD
     override suspend fun updateTask(task: TaskDto): NetworkResult<TaskDto> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = yandexApi.updateTask(task, task.id).awaitResponse()
-                if (response.isSuccessful) {
-                    NetworkResult.Success(response.body()!!)
-                } else {
-                    NetworkResult.Error(Exception())
-                }
-            } catch (e: UnknownHostException) {
-                NetworkResult.Error(e)
-            } catch (e: ConnectException) {
-                NetworkResult.Error(e)
+                NetworkResult.Success(yandexApi.updateTask(task, task.id))
             } catch (e: Exception) {
                 NetworkResult.Error(e)
             }
@@ -72,12 +49,7 @@ class TasksYandexDataSourceImpl(private val yandexApi: YandexApi) : TasksYandexD
     override suspend fun updateTasks(addAndDeleteDto: AddAndDeleteDto): NetworkResult<List<TaskDto>> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = yandexApi.updateTasks(addAndDeleteDto)
-                NetworkResult.Success(response)
-            } catch (e: UnknownHostException) {
-                NetworkResult.Error(e)
-            } catch (e: ConnectException) {
-                NetworkResult.Error(e)
+                NetworkResult.Success(yandexApi.updateTasks(addAndDeleteDto))
             } catch (e: Exception) {
                 NetworkResult.Error(e)
             }
@@ -87,16 +59,7 @@ class TasksYandexDataSourceImpl(private val yandexApi: YandexApi) : TasksYandexD
     override suspend fun deleteTask(taskId: String): NetworkResult<TaskDto> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = yandexApi.deleteTask(taskId).awaitResponse()
-                if (response.isSuccessful) {
-                    NetworkResult.Success(response.body()!!)
-                } else {
-                    NetworkResult.Error(Exception())
-                }
-            } catch (e: UnknownHostException) {
-                NetworkResult.Error(e)
-            } catch (e: ConnectException) {
-                NetworkResult.Error(e)
+                NetworkResult.Success(yandexApi.deleteTask(taskId))
             } catch (e: Exception) {
                 NetworkResult.Error(e)
             }

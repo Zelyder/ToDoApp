@@ -10,28 +10,28 @@ import kotlinx.coroutines.launch
 
 class TasksListViewModel(private val tasksListRepository: TasksListRepository) : ViewModel() {
     private val _tasks = MutableLiveData<List<Task>>()
-    private val _isHided = MutableLiveData(true)
+    private val _isHidden = MutableLiveData(true)
     private val _doneCount = MutableLiveData<Int>()
 
     val tasks: LiveData<List<Task>> get() = _tasks
-    val isHided: LiveData<Boolean> get() = _isHided
+    val isHidden: LiveData<Boolean> get() = _isHidden
     val doneCount: LiveData<Int> get() = _doneCount
 
 
     fun updateList() {
         viewModelScope.launch {
             _tasks.value =
-                if (_isHided.value == false) tasksListRepository.getTasks() else tasksListRepository.getTasks()
+                if (_isHidden.value == false) tasksListRepository.getTasks() else tasksListRepository.getTasks()
                     .filter { !it.isDone }
             _doneCount.value = tasksListRepository.getCountOfDone()
         }
     }
 
     fun toggleVisibility() {
-        if (_isHided.value == true) {
-            _isHided.value = false
-        } else if (_isHided.value == false) {
-            _isHided.value = true
+        if (_isHidden.value == true) {
+            _isHidden.value = false
+        } else if (_isHidden.value == false) {
+            _isHidden.value = true
         }
         updateList()
     }

@@ -12,7 +12,7 @@ import java.util.*
 data class TaskEntity (
     @PrimaryKey
     @ColumnInfo(name = DbContract.Tasks.COLUMN_NAME_ID)
-    val id: String = UUID.randomUUID().toString(),
+    val id: String,
     @ColumnInfo(name = DbContract.Tasks.COLUMN_NAME_TEXT)
     val text: String,
     @ColumnInfo(name = DbContract.Tasks.COLUMN_NAME_IMPORTANCE)

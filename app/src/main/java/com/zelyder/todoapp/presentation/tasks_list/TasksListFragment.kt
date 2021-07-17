@@ -1,7 +1,6 @@
 package com.zelyder.todoapp.presentation.tasks_list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,7 +77,7 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
             adapter.submitList(tasks)
         }
 
-        viewModel.isHided.observe(viewLifecycleOwner) { isHided ->
+        viewModel.isHidden.observe(viewLifecycleOwner) { isHided ->
             if (isHided) {
                 visibilityImg?.setImageResource(R.drawable.ic_visibility_off)
             } else {

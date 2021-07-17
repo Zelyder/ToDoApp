@@ -8,16 +8,16 @@ import retrofit2.http.*
 interface YandexApi {
 
     @POST("tasks")
-    suspend fun sendTask(@Body task: TaskDto): Call<TaskDto>
+    suspend fun sendTask(@Body task: TaskDto): TaskDto
 
     @GET("tasks")
     suspend fun getTasks(): List<TaskDto>
 
     @PUT("tasks/{id}")
-    suspend fun updateTask(@Body task: TaskDto,  @Path("id") id: String): Call<TaskDto>
+    suspend fun updateTask(@Body task: TaskDto, @Path("id") id: String): TaskDto
 
     @DELETE("tasks/{id}")
-    suspend fun deleteTask(@Path("id") id: String): Call<TaskDto>
+    suspend fun deleteTask(@Path("id") id: String): TaskDto
 
     @PUT("tasks")
     suspend fun updateTasks(@Body addAndDeleteDto: AddAndDeleteDto): List<TaskDto>

@@ -22,7 +22,7 @@ fun Task.toEntity(createdAt: Long? = null, updatedAt: Long? = null) = TaskEntity
     text = text,
     importance = importance,
     isDone = isDone,
-    deadline = if(date != null && date != "0") date!!.toDateInMillis() else  0L,
+    deadline = if (date != null && date != "0") date!!.toDateInMillis() else 0L,
     createdAt = createdAt ?: Calendar.getInstance().timeInMillis,
     updatedAt = updatedAt ?: Calendar.getInstance().timeInMillis
 )
@@ -30,7 +30,7 @@ fun Task.toEntity(createdAt: Long? = null, updatedAt: Long? = null) = TaskEntity
 fun TaskEntity.toDto() = TaskDto(
     id = id,
     text = text,
-    importance = importance.toDtoString(),
+    importance = importance.type,
     done = isDone,
     deadline = deadline / 1000,
     createdAt = createdAt / 1000,
@@ -40,20 +40,9 @@ fun TaskEntity.toDto() = TaskDto(
 fun TaskDto.toEntity() = TaskEntity(
     id = id,
     text = text,
-     importance = when(importance) {
-         "basic" -> Importance.NONE
-         "low" -> Importance.LOW
-         "important" -> Importance.HIGH
-         else -> throw IllegalArgumentException("No such importance lvl")
-     },
+    importance = Importance.parse(importance),
     isDone = done,
-    deadline = (deadline ?: 0)  * 1000,
+    deadline = (deadline ?: 0) * 1000,
     createdAt = createdAt * 1000,
     updatedAt = updatedAt * 1000
 )
-
-fun Importance.toDtoString(): String = when (this) {
-    Importance.NONE -> "basic"
-    Importance.LOW -> "low"
-    Importance.HIGH -> "important"
-}

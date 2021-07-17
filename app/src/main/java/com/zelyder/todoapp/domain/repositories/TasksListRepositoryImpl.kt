@@ -29,9 +29,9 @@ class TasksListRepositoryImpl(
     private val networkTracker: NetworkStatusTracker
 ) : TasksListRepository {
 
-    var isConnected = false
+    private var isConnected = false
 
-    override suspend fun checkInternetAndSync() {
+    override suspend fun checkInternetAndSync() = withContext(Dispatchers.IO){
         networkTracker.networkStatus
             .collectLatest {
                 isConnected = when (it) {
@@ -44,11 +44,13 @@ class TasksListRepositoryImpl(
             }
     }
 
-    override suspend fun getTasks(needFilter: Boolean): List<Task> {
-        return tasksLocalDataSource.getTasks(needFilter).map { it.toTask() }
+    override suspend fun getTasks(needFilter: Boolean): List<Task> = withContext(Dispatchers.IO){
+       tasksLocalDataSource.getTasks(needFilter).map { it.toTask() }
     }
 
-    override suspend fun getCountOfDone(): Int = tasksLocalDataSource.getCountOfDone()
+    override suspend fun getCountOfDone(): Int = withContext(Dispatchers.IO) {
+        tasksLocalDataSource.getCountOfDone()
+    }
 
     override suspend fun addTask(task: Task): Unit = withContext(Dispatchers.IO) {
         val taskEntity = task.toEntity()
@@ -58,7 +60,7 @@ class TasksListRepositoryImpl(
         }
     }
 
-    override suspend fun setCheckTask(taskId: String, isDone: Boolean) {
+    override suspend fun setCheckTask(taskId: String, isDone: Boolean) = withContext(Dispatchers.IO) {
         tasksLocalDataSource.setCheckTask(taskId, isDone)
         if (isConnected) {
             tasksLocalDataSource.getTaskById(taskId)?.toDto()
@@ -66,7 +68,7 @@ class TasksListRepositoryImpl(
         }
     }
 
-    override suspend fun editTask(task: Task) {
+    override suspend fun editTask(task: Task) = withContext(Dispatchers.IO){
         val oldTask = tasksLocalDataSource.getTaskById(task.id)
         if (oldTask != null) {
             val newTask = task.toEntity(createdAt = oldTask.createdAt)
@@ -77,19 +79,19 @@ class TasksListRepositoryImpl(
         }
     }
 
-    override suspend fun deleteTaskById(taskId: String) {
+    override suspend fun deleteTaskById(taskId: String) = withContext(Dispatchers.IO){
         tasksLocalDataSource.deleteTaskById(taskId)
         if (isConnected) {
             yandexDataSource.deleteTask(taskId)
         }
     }
 
-    override suspend fun getCountTodayTasks(): Int {
-        return tasksLocalDataSource.getTasks().map { it.toTask() }
+    override suspend fun getCountTodayTasks(): Int = withContext(Dispatchers.IO){
+        tasksLocalDataSource.getTasks().map { it.toTask() }
             .count { it.date?.let { date -> isToday(date) } ?: false }
     }
 
-    suspend fun sync() {
+    private suspend fun sync() = withContext(Dispatchers.IO){
         when (val result = yandexDataSource.getTasks()) {
             is NetworkResult.Success -> {
                 val localTasks = tasksLocalDataSource.getTasks()
@@ -108,13 +110,13 @@ class TasksListRepositoryImpl(
                 val updateLocalList: MutableList<TaskEntity> = mutableListOf()
 
                 if (common.isNotEmpty()) {
-                    val localCommon = localTasks.filter { it.id in common }.sortedBy { it.id }
-                    val cloudCommon = cloudTasks.filter { it.id in common }.sortedBy { it.id }
-                    for (i in common.indices) {
-                        if (localCommon[i].updatedAt > cloudCommon[i].updatedAt) {
-                            updateCloudList.add(localCommon[i].toDto())
-                        } else if (localCommon[i].updatedAt < cloudCommon[i].updatedAt) {
-                            updateLocalList.add(cloudCommon[i].toEntity())
+                    val local = localTasks.associateBy { it.id }
+                    val cloud = cloudTasks.associateBy { it.id }
+                    for (id in common) {
+                        if (local.getValue(id).updatedAt > cloud.getValue(id).updatedAt) {
+                            updateCloudList.add(local.getValue(id).toDto())
+                        } else if (local.getValue(id).updatedAt < cloud.getValue(id).updatedAt) {
+                            updateLocalList.add(cloud.getValue(id).toEntity())
                         }
                     }
                 }

@@ -45,7 +45,7 @@ fun calculateTimeDiffInMillis(hourOfDay: Int, minute: Int): Long {
 private fun getDatesInMillis(date: String): Pair<Long, Long> {
     val nowInMillis: Long = Calendar.getInstance().timeInMillis.toDate().toDateInMillis()
     val dateInMillis: Long = date.toDateInMillis()
-    return Pair(dateInMillis, nowInMillis)
+    return dateInMillis to nowInMillis
 }
 
 fun String.toDateInMillis(withTime: Boolean = false): Long {
