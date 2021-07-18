@@ -20,7 +20,11 @@ import com.zelyder.todoapp.R
 import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.viewModelFactoryProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.serialization.ExperimentalSerializationApi
 
+@ExperimentalCoroutinesApi
+@ExperimentalSerializationApi
 class TasksListFragment : Fragment(), TasksListItemClickListener {
     private val viewModel: TasksListViewModel by viewModels { viewModelFactoryProvider().viewModelFactory() }
 
@@ -30,6 +34,13 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
     var nestedScrollView: NestedScrollView? = null
 
     private val args: TasksListFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) {
+            viewModel.sync()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,7 +77,7 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
             adapter.submitList(tasks)
         }
 
-        viewModel.isHided.observe(viewLifecycleOwner) { isHided ->
+        viewModel.isHidden.observe(viewLifecycleOwner) { isHided ->
             if (isHided) {
                 visibilityImg?.setImageResource(R.drawable.ic_visibility_off)
             } else {
@@ -117,6 +128,10 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
 
     override fun onCheck(task: Task) {
         viewModel.checkTask(task)
+    }
+
+    override fun onEdit(task: Task) {
+        viewModel.editTask(task)
     }
 
     override fun onItemClick(task: Task) {

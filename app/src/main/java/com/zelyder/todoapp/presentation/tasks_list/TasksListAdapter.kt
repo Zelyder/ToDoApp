@@ -51,6 +51,15 @@ class TasksListAdapter(val clickListener: TasksListItemClickListener) : ListAdap
         notifyItemChanged(position)
     }
 
+    fun editItem(position: Int) {
+        val item = getItem(position)
+        clickListener.onEdit(item)
+        val newList = currentList.toMutableList()
+        newList[position] = item
+        submitList(newList)
+        notifyItemChanged(position)
+    }
+
     inner class TasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val textView: TextView = itemView.findViewById(R.id.tvItemText)

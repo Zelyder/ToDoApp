@@ -38,7 +38,6 @@ class Notifications {
         initialize(context)
         showNotification(context, countTasksToDo)
     }
-
     fun dismiss(countTasksToDo: Int) {
         notificationManager.cancel(REMINDER_TAG, countTasksToDo)
     }
@@ -70,4 +69,6 @@ class Notifications {
             notification
         )
     }
+
+
 }

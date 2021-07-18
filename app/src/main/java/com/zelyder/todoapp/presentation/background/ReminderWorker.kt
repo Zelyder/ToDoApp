@@ -13,7 +13,6 @@ class ReminderWorker(val context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         return try {
             updateData()
-            Log.d("LOL", "doWork")
             sendNotification(context)
             Result.success()
         } catch (e: Exception) {
@@ -43,7 +42,7 @@ class ReminderWorker(val context: Context, params: WorkerParameters) :
             WorkManager.getInstance(context).enqueueUniqueWork(REMINDER_TAG, ExistingWorkPolicy.REPLACE, request)
         }
 
-        private fun updateData() {
+        private suspend fun updateData() {
             countTasksToDo = tasksListRepository.getCountTodayTasks()
         }
 
