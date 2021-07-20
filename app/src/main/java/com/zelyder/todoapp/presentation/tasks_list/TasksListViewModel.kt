@@ -38,7 +38,7 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
 
     fun checkTask(task: Task) {
         viewModelScope.launch {
-            tasksListRepository.setCheckTask(taskId = task.id, task.isDone)
+            tasksListRepository.editTask(task)
             _doneCount.value = tasksListRepository.getCountOfDone()
         }
     }
