@@ -21,9 +21,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.withContext
 import java.util.*
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class TasksListRepositoryImpl(
+class TasksListRepositoryImpl @Inject constructor(
     private val tasksLocalDataSource: TasksLocalDataSource,
     private val deletedTasksDataSource: DeletedTasksDataSource,
     private val yandexDataSource: TasksYandexDataSource,

@@ -13,9 +13,10 @@ import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.create
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @ExperimentalSerializationApi
-class TasksNetworkModule: TasksNetworkClient {
+class TasksNetworkModule @Inject constructor(): TasksNetworkClient {
 
     private val jsonFormat = Json {
         ignoreUnknownKeys = true

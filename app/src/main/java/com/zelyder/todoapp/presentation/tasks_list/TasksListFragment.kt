@@ -1,5 +1,6 @@
 package com.zelyder.todoapp.presentation.tasks_list
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,16 +18,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zelyder.todoapp.R
+import com.zelyder.todoapp.appComponent
 import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.models.Task
-import com.zelyder.todoapp.viewModelFactoryProvider
+import com.zelyder.todoapp.presentation.core.ViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @ExperimentalSerializationApi
 class TasksListFragment : Fragment(), TasksListItemClickListener {
-    private val viewModel: TasksListViewModel by viewModels { viewModelFactoryProvider().viewModelFactory() }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel: TasksListViewModel by viewModels { viewModelFactory }
 
     var recyclerView: RecyclerView? = null
     var visibilityImg: ImageView? = null
@@ -34,6 +40,11 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
     var nestedScrollView: NestedScrollView? = null
 
     private val args: TasksListFragmentArgs by navArgs()
+
+    override fun onAttach(context: Context) {
+        context.appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,8 +113,8 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
             nestedScrollView?.fullScroll(View.FOCUS_UP)
         }
 
-        if(args.editScreenExitStatus != EditScreenExitStatus.NONE){
-            when(args.editScreenExitStatus) {
+        if (args.editScreenExitStatus != EditScreenExitStatus.NONE) {
+            when (args.editScreenExitStatus) {
                 EditScreenExitStatus.EDIT -> args.taskFromEditScreen?.let {
                     viewModel.editTask(it)
                 }

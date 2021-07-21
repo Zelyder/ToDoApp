@@ -14,8 +14,9 @@ import retrofit2.awaitResponse
 import java.lang.Exception
 import java.net.ConnectException
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-class TasksYandexDataSourceImpl(private val yandexApi: YandexApi) : TasksYandexDataSource {
+class TasksYandexDataSourceImpl (private val yandexApi: YandexApi) : TasksYandexDataSource {
     override suspend fun getTasks(): NetworkResult<List<TaskDto>> {
         return withContext(Dispatchers.IO) {
             try {

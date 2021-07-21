@@ -5,8 +5,9 @@ import com.zelyder.todoapp.data.storage.entities.DeletedTaskEntity
 import com.zelyder.todoapp.data.storage.entities.TaskEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class TasksLocalDataSourceImpl(private val tasksDb: TasksDb): TasksLocalDataSource {
+class TasksLocalDataSourceImpl @Inject constructor(private val tasksDb: TasksDb): TasksLocalDataSource {
     override suspend fun getTasks(needFilter: Boolean): List<TaskEntity> {
         return tasksDb.tasksDao().getAll(needFilter)
     }
