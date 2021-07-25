@@ -7,7 +7,7 @@ import com.zelyder.todoapp.data.mappers.toEntity
 import com.zelyder.todoapp.data.mappers.toTask
 import com.zelyder.todoapp.data.network.dto.AddAndDeleteDto
 import com.zelyder.todoapp.data.network.dto.TaskDto
-import com.zelyder.todoapp.data.storage.entities.TaskEntity
+import com.zelyder.todoapp.di.modules.IoDispatcher
 import com.zelyder.todoapp.domain.datasources.DeletedTasksDataSource
 import com.zelyder.todoapp.domain.datasources.TasksLocalDataSource
 import com.zelyder.todoapp.domain.datasources.TasksYandexDataSource
@@ -15,12 +15,13 @@ import com.zelyder.todoapp.domain.enums.NetworkResult
 import com.zelyder.todoapp.domain.enums.NetworkStatus
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.presentation.core.NetworkStatusTracker
+import com.zelyder.todoapp.presentation.core.NetworkStatusTrackerImpl
 import com.zelyder.todoapp.presentation.core.isToday
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -28,13 +29,14 @@ class TasksListRepositoryImpl @Inject constructor(
     private val tasksLocalDataSource: TasksLocalDataSource,
     private val deletedTasksDataSource: DeletedTasksDataSource,
     private val yandexDataSource: TasksYandexDataSource,
-    private val networkTracker: NetworkStatusTracker
+    private val networkTracker: NetworkStatusTracker,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) : TasksListRepository {
 
     private var isConnected = false
 
-    override suspend fun checkInternetAndSync() = withContext(Dispatchers.IO) {
-        networkTracker.networkStatus
+    override suspend fun checkInternetAndSync() = withContext(dispatcher) {
+        networkTracker.getNetworkStatus()
             .collectLatest {
                 isConnected = when (it) {
                     NetworkStatus.Unavailable -> false
@@ -46,15 +48,15 @@ class TasksListRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun getTasks(needFilter: Boolean): List<Task> = withContext(Dispatchers.IO) {
+    override suspend fun getTasks(needFilter: Boolean): List<Task> = withContext(dispatcher) {
         tasksLocalDataSource.getTasks(needFilter).map { it.toTask() }
     }
 
-    override suspend fun getCountOfDone(): Int = withContext(Dispatchers.IO) {
+    override suspend fun getCountOfDone(): Int = withContext(dispatcher) {
         tasksLocalDataSource.getCountOfDone()
     }
 
-    override suspend fun addTask(task: Task): Unit = withContext(Dispatchers.IO) {
+    override suspend fun addTask(task: Task): Unit = withContext(dispatcher) {
 
         val taskEntity = if (isConnected) task.toEntity() else task.toEntity(createdAt = 0L)
         tasksLocalDataSource.saveTask(taskEntity)
@@ -64,7 +66,7 @@ class TasksListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun setCheckTask(taskId: String, isDone: Boolean) =
-        withContext(Dispatchers.IO) {
+        withContext(dispatcher) {
             tasksLocalDataSource.setCheckTask(taskId, isDone)
             if (isConnected) {
                 tasksLocalDataSource.getTaskById(taskId)?.toDto()
@@ -72,7 +74,7 @@ class TasksListRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun editTask(task: Task) = withContext(Dispatchers.IO) {
+    override suspend fun editTask(task: Task) = withContext(dispatcher) {
         val oldTask = tasksLocalDataSource.getTaskById(task.id)
         if (oldTask != null) {
             val newTask = task.toEntity(createdAt = oldTask.createdAt)
@@ -83,19 +85,19 @@ class TasksListRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteTaskById(taskId: String) = withContext(Dispatchers.IO) {
+    override suspend fun deleteTaskById(taskId: String) = withContext(dispatcher) {
         tasksLocalDataSource.deleteTaskById(taskId)
         if (isConnected) {
             yandexDataSource.deleteTask(taskId)
         }
     }
 
-    override suspend fun getCountTodayTasks(): Int = withContext(Dispatchers.IO) {
+    override suspend fun getCountTodayTasks(): Int = withContext(dispatcher) {
         tasksLocalDataSource.getTasks().map { it.toTask() }
             .count { it.date?.let { date -> isToday(date) } ?: false }
     }
 
-    private suspend fun sync() = withContext(Dispatchers.IO) {
+    private suspend fun sync() = withContext(dispatcher) {
         when (val result = yandexDataSource.getTasks()) {
             is NetworkResult.Success -> {
                 val localTasks = tasksLocalDataSource.getTasks()
@@ -115,7 +117,7 @@ class TasksListRepositoryImpl @Inject constructor(
                     val local = localTasks.associateBy { it.id }
                     val cloud = cloudTasks.associateBy { it.id }
                     for (id in common) {
-                        if (local.getValue(id).updatedAt > cloud.getValue(id).updatedAt) {
+                        if (local.getValue(id).toDto().updatedAt > cloud.getValue(id).updatedAt) {
                             updateCloudList.add(local.getValue(id).toDto())
                         }
                     }

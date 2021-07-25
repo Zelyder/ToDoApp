@@ -1,14 +1,11 @@
-package com.zelyder.todoapp.di
+package com.zelyder.todoapp.di.modules
 
 import android.content.Context
 import com.zelyder.todoapp.data.network.TasksNetworkModule
 import com.zelyder.todoapp.data.storage.db.TasksDb
 import com.zelyder.todoapp.domain.datasources.*
-import com.zelyder.todoapp.domain.repositories.TasksListRepositoryImpl
-import com.zelyder.todoapp.presentation.core.NetworkStatusTracker
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Singleton
 

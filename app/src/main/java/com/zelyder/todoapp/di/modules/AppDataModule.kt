@@ -1,4 +1,4 @@
-package com.zelyder.todoapp.di
+package com.zelyder.todoapp.di.modules
 
 import com.zelyder.todoapp.domain.repositories.TasksListRepository
 import com.zelyder.todoapp.presentation.core.ViewModelFactory

@@ -48,22 +48,22 @@ private fun getDatesInMillis(date: String): Pair<Long, Long> {
     return dateInMillis to nowInMillis
 }
 
-fun String.toDateInMillis(withTime: Boolean = false): Long {
+fun String.toDateInMillis(withTime: Boolean = false, locale: Locale = Locale.getDefault()): Long {
     val simpleDateFormat =  if(withTime) {
-        SimpleDateFormat("dd MMMM yyyy\n HH:mm", Locale.getDefault())
+        SimpleDateFormat("dd MMMM yyyy\n HH:mm", locale)
     }else {
-        SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        SimpleDateFormat("dd MMMM yyyy", locale)
     }
     return simpleDateFormat.parse(this)?.time ?: 0L
 }
 
-fun Long.toDate(showTime: Boolean = false): String {
+fun Long.toDate(showTime: Boolean = false, locale: Locale = Locale.getDefault()): String {
     return if(showTime) {
-        val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy\n HH:mm", Locale.getDefault())
+        val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy\n HH:mm", locale)
         simpleDateFormat.format(Date(this))
 
     }else {
-        val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy", locale)
         simpleDateFormat.format(Date(this))
     }
 }
