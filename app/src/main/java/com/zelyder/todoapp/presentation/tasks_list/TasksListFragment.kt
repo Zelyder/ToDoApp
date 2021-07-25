@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -21,7 +20,6 @@ import com.zelyder.todoapp.R
 import com.zelyder.todoapp.appComponent
 import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.models.Task
-import com.zelyder.todoapp.presentation.core.ViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
@@ -31,8 +29,7 @@ import javax.inject.Inject
 class TasksListFragment : Fragment(), TasksListItemClickListener {
 
     @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-    private val viewModel: TasksListViewModel by viewModels { viewModelFactory }
+    lateinit var  viewModel: TasksListViewModel
 
     var recyclerView: RecyclerView? = null
     var visibilityImg: ImageView? = null

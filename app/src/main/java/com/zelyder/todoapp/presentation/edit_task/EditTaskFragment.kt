@@ -9,7 +9,6 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -19,7 +18,6 @@ import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.presentation.core.Dialogs
-import com.zelyder.todoapp.presentation.core.ViewModelFactory
 import com.zelyder.todoapp.presentation.core.toDate
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -43,9 +41,9 @@ class EditTaskFragment : Fragment() {
 
     private val args: EditTaskFragmentArgs by navArgs()
 
+
     @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-    private val viewModel: EditTaskViewModel by viewModels { viewModelFactory }
+    lateinit var  viewModel: EditTaskViewModel
 
     @ExperimentalCoroutinesApi
     @ExperimentalSerializationApi

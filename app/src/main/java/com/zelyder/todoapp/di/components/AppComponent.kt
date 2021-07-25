@@ -11,11 +11,11 @@ import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
-import javax.inject.Singleton
+import javax.inject.Scope
 
 @ExperimentalSerializationApi
 @ExperimentalCoroutinesApi
-@Singleton
+@AppScope
 @Component(
     modules = [
         AppDataModule::class,
@@ -44,3 +44,7 @@ interface AppComponent {
 
     fun inject(myApp: MyApp)
 }
+
+@Scope
+@kotlin.annotation.Retention
+annotation class AppScope
