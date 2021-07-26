@@ -39,6 +39,7 @@ def lifecycle_version = "2.3.1"
 def work_version = "2.5.0"
 def room_version = "2.3.0"
 def dagger_version = "2.36"
+def mockito_core_version = "2.28.2"
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -54,6 +55,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.4.0'
     androidTestImplementation 'androidx.test:rules:1.4.0'
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation "org.mockito:mockito-android:$mockito_core_version"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1'

@@ -14,14 +14,9 @@ import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.enums.NetworkResult
 import com.zelyder.todoapp.domain.enums.NetworkStatus
 import com.zelyder.todoapp.domain.models.Task
-import com.zelyder.todoapp.presentation.core.NetworkStatusTrackerImpl
-import com.zelyder.todoapp.presentation.core.isToday
-import com.zelyder.todoapp.presentation.core.toDateInMillis
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
-import io.mockk.every
+import com.zelyder.todoapp.presentation.core.*
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.slot
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -35,6 +30,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.util.*
+import kotlin.reflect.jvm.javaMethod
 
 @ExperimentalCoroutinesApi
 @RunWith(JUnit4::class)
@@ -57,6 +53,7 @@ class TasksListRepositoryImplTest : TestCase() {
     @MockK
     lateinit var mockNetworkTracker: NetworkStatusTrackerImpl
 
+
     @Before
     public override fun setUp() {
         MockKAnnotations.init(this)
@@ -77,11 +74,15 @@ class TasksListRepositoryImplTest : TestCase() {
 
     @Test
     fun `Should show the number of tasks for today`() {
-        coEvery { mockTasksLocalDataSource.getTasks() } returns tasks
+        val localTasks = tasks
+        val dateSlot = slot<String>()
+        mockkStatic(::isToday.javaMethod!!.declaringClass.kotlin)
+        coEvery { mockTasksLocalDataSource.getTasks() } returns localTasks
+        coEvery { isToday(capture(dateSlot)) } coAnswers { dateSlot.captured == today.toDate()  }
 
         runBlockingTest {
             val countTodayTasks = repository.getCountTodayTasks()
-            assertEquals(tasks.count { it.deadline == today }, countTodayTasks)
+            assertEquals(localTasks.count { it.deadline == today }, countTodayTasks)
         }
 
     }
