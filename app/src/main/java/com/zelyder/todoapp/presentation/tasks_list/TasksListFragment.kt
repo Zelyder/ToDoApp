@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -20,16 +21,14 @@ import com.zelyder.todoapp.R
 import com.zelyder.todoapp.appComponent
 import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.models.Task
+import com.zelyder.todoapp.presentation.core.ViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @ExperimentalSerializationApi
-class TasksListFragment : Fragment(), TasksListItemClickListener {
-
-    @Inject
-    lateinit var  viewModel: TasksListViewModel
+class TasksListFragment @Inject constructor(private val viewModelFactory: ViewModelFactory) : Fragment(), TasksListItemClickListener {
 
     var recyclerView: RecyclerView? = null
     var visibilityImg: ImageView? = null
@@ -37,6 +36,7 @@ class TasksListFragment : Fragment(), TasksListItemClickListener {
     var nestedScrollView: NestedScrollView? = null
 
     private val args: TasksListFragmentArgs by navArgs()
+    private val viewModel: TasksListViewModel by viewModels { viewModelFactory }
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)

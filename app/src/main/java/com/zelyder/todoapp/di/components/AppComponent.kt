@@ -5,6 +5,7 @@ import androidx.annotation.NonNull
 import com.zelyder.todoapp.MyApp
 import com.zelyder.todoapp.di.WorkerBindingModule
 import com.zelyder.todoapp.di.modules.*
+import com.zelyder.todoapp.presentation.MainActivity
 import com.zelyder.todoapp.presentation.edit_task.EditTaskFragment
 import com.zelyder.todoapp.presentation.tasks_list.TasksListFragment
 import dagger.BindsInstance
@@ -43,6 +44,8 @@ interface AppComponent {
     fun inject(fragment: EditTaskFragment)
 
     fun inject(myApp: MyApp)
+
+    fun inject(mainActivity: MainActivity)
 }
 
 @Scope

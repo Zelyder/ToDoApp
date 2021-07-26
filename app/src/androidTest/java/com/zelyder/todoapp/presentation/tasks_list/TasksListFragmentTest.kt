@@ -9,7 +9,11 @@ import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.zelyder.todoapp.R
+import com.zelyder.todoapp.domain.repositories.FakeTasksListRepository
+import com.zelyder.todoapp.presentation.core.MainFragmentFactory
+import com.zelyder.todoapp.presentation.core.ViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.junit.Before
@@ -20,15 +24,22 @@ import org.mockito.Mockito.verify
 
 @ExperimentalSerializationApi
 @ExperimentalCoroutinesApi
-
 class TasksListFragmentTest {
 
     private lateinit var scenario: FragmentScenario<TasksListFragment>
+    private lateinit var repository: FakeTasksListRepository
 
     @Before
     fun setup() {
         val bundle = Bundle()
-        scenario = launchFragmentInContainer(themeResId = R.style.Theme_ToDoApp, fragmentArgs = bundle)
+        repository = FakeTasksListRepository()
+        val viewModelFactory = ViewModelFactory(repository)
+        val factory = MainFragmentFactory(viewModelFactory)
+        scenario = launchFragmentInContainer(
+            themeResId = R.style.Theme_ToDoApp,
+            fragmentArgs = bundle,
+            factory = factory
+        )
         scenario.moveToState(Lifecycle.State.STARTED)
     }
 
@@ -46,7 +57,7 @@ class TasksListFragmentTest {
                 true
             )
         )
-
     }
+
 
 }
