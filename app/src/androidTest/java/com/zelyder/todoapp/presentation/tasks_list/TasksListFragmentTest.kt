@@ -7,7 +7,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.zelyder.todoapp.R
@@ -16,11 +17,12 @@ import com.zelyder.todoapp.presentation.core.MainFragmentFactory
 import com.zelyder.todoapp.presentation.core.ViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-
 
 @ExperimentalSerializationApi
 @ExperimentalCoroutinesApi
@@ -57,6 +59,45 @@ class TasksListFragmentTest {
                 true
             )
         )
+    }
+
+    @Test
+    fun clickCheckBox_TaskIsDone() {
+
+        onView(withId(R.id.rvTasksList)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<TasksListAdapter.TasksViewHolder>(
+                0,
+                MyViewActions.clickChildViewWithId(R.id.cbItemTask)
+            )
+        )
+
+        Assert.assertTrue(repository.tasks[0].isDone)
+    }
+
+    @Test
+    fun swipeRightTaskItem_deleteItem() {
+        onView(withId(R.id.rvTasksList)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<TasksListAdapter.TasksViewHolder>(
+                0,
+                swipeRight()
+            )
+        )
+
+        Assert.assertTrue(repository.tasks[0].isDone)
+    }
+
+    @Test
+    fun swipeLeftTaskItem_deleteItem() {
+        val startSize = repository.tasks.size
+
+        onView(withId(R.id.rvTasksList)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<TasksListAdapter.TasksViewHolder>(
+                0,
+                swipeLeft()
+            )
+        )
+
+        assertEquals(startSize - 1, repository.tasks.size)
     }
 
 

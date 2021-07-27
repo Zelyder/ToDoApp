@@ -1,10 +1,7 @@
 package com.zelyder.todoapp.domain.repositories
 
-import com.zelyder.todoapp.data.storage.DbContract
 import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.models.Task
-import com.zelyder.todoapp.presentation.core.toDate
-import com.zelyder.todoapp.presentation.core.toDateInMillis
 
 class FakeTasksListRepository(initTasks: List<Task>? = null, private val today: String = "24 июля 2021"): TasksListRepository {
 
@@ -42,7 +39,7 @@ class FakeTasksListRepository(initTasks: List<Task>? = null, private val today: 
     }
 
     override suspend fun deleteTaskById(taskId: String) {
-        tasks.removeIf { it.id == taskId }
+        tasks.removeAll { it.id == taskId }
     }
 
     override suspend fun getCountTodayTasks(): Int = tasks.count { it.date == today }
