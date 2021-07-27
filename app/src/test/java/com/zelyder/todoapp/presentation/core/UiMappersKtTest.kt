@@ -26,7 +26,7 @@ class UiMappersKtTest : TestCase() {
 
     @Test
     fun `test is today`() {
-        assertEquals(true, isToday(Calendar.getInstance().timeInMillis.toDate()))
+        assertEquals(true, isToday(Calendar.getInstance().timeInMillis.toDate(locale = locale)))
         assertEquals(false, isToday("28 июня 2021"))
         assertEquals(false, isToday("27 июня 2020"))
     }
