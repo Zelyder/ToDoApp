@@ -7,7 +7,6 @@ import com.zelyder.todoapp.MainCoroutineRule
 import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.domain.repositories.FakeTasksListRepository
-import com.zelyder.todoapp.presentation.core.toDateInMillis
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi

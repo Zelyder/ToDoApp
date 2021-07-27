@@ -132,16 +132,16 @@ class TasksListRepositoryImplTest : TestCase() {
     }
 
     companion object {
-        val today = "24 июля 2021".toDateInMillis()
+        const val today = 1627074000000L // 24 июля 2021
         val tasks = listOf(
             TaskEntity(
                 "8b9a796c-e6e7-4543-93d7-4fda251cef30",
                 "test 2",
                 Importance.HIGH,
                 false,
-                "25 июля 2021".toDateInMillis(),
-                createdAt = "22 июля 2021".toDateInMillis(),
-                updatedAt = "22 июля 2021".toDateInMillis()
+                1627160400000L, //   25 июля 2021
+                createdAt = 1626901200000L, //  22 июля 2021
+                updatedAt =  1626901200000L //  22 июля 2021
             ),
             TaskEntity(
                 "eebc4ce8-4741-420f-b302-a721afe6db25",
@@ -149,26 +149,26 @@ class TasksListRepositoryImplTest : TestCase() {
                 Importance.LOW,
                 true,
                 today,
-                createdAt = "22 июля 2021".toDateInMillis(),
-                updatedAt = "22 июля 2021".toDateInMillis()
+                createdAt = 1626901200000L, //  22 июля 2021
+                updatedAt = 1626901200000L //  22 июля 2021
             ),
             TaskEntity(
                 "27987619-7c11-461a-8cb0-7b3c87d14b47",
                 "test 4",
                 Importance.NONE,
                 true,
-                "23 июля 2021".toDateInMillis(),
-                createdAt = "22 июля 2021".toDateInMillis(),
-                updatedAt = "22 июля 2021".toDateInMillis()
+                1626987600000L,  // 23 июля 2021
+                createdAt = 1626901200000L, //  22 июля 2021
+                updatedAt = 1626901200000L //  22 июля 2021
             ),
             TaskEntity(
                 "c8782fde-cc8f-41a3-9e2a-2ed68c404f90",
                 "test 5",
                 Importance.HIGH,
                 false,
-                "28 июля 2021".toDateInMillis(),
+                1627419600000L, // 28 июля 2021
                 createdAt = 0L,
-                updatedAt = "24 июля 2021".toDateInMillis()
+                updatedAt = 1627074000000L  //  24 июля 2021
             ),
         )
 
@@ -181,26 +181,26 @@ class TasksListRepositoryImplTest : TestCase() {
                 Importance.NONE,
                 false,
                 today,
-                createdAt = "22 июля 2021".toDateInMillis(),
-                updatedAt = "22 июля 2021".toDateInMillis()
+                createdAt = 1626901200000L, //  22 июля 2021
+                updatedAt = 1626901200000L //  22 июля 2021
             ),
             TaskEntity(
                 "8b9a796c-e6e7-4543-93d7-4fda251cef30",
                 "new test 2",
                 Importance.HIGH,
                 false,
-                "27 июля 2021".toDateInMillis(),
-                createdAt = "22 июля 2021".toDateInMillis(),
-                updatedAt = "24 июля 2021".toDateInMillis()
+                1627333200000L, //  27 июля 2021
+                createdAt = 1626901200000L, //  22 июля 2021
+                updatedAt = 1627074000000L // 24 июля 2021
             ),
             TaskEntity(
                 "27987619-7c11-461a-8cb0-7b3c87d14b47",
                 "test 4",
                 Importance.NONE,
                 true,
-                "23 июля 2021".toDateInMillis(),
-                createdAt = "22 июля 2021".toDateInMillis(),
-                updatedAt = "22 июля 2021".toDateInMillis()
+                1626987600000L, //  23 июля 2021
+                createdAt = 1626901200000L, //  22 июля 2021
+                updatedAt = 1626901200000L //  22 июля 2021
             ),
         )
         val mergedTasks = listOf(
@@ -209,27 +209,27 @@ class TasksListRepositoryImplTest : TestCase() {
                 "new test 2",
                 Importance.HIGH,
                 false,
-                "27 июля 2021".toDateInMillis(),
-                createdAt = "22 июля 2021".toDateInMillis(),
-                updatedAt = "24 июля 2021".toDateInMillis()
+                1627333200000L, //  27 июля 2021
+                createdAt = 1626901200000L, //  22 июля 2021
+                updatedAt = 1627074000000L // 24 июля 2021
             ),
             TaskEntity(
                 "27987619-7c11-461a-8cb0-7b3c87d14b47",
                 "test 4",
                 Importance.NONE,
                 true,
-                "23 июля 2021".toDateInMillis(),
-                createdAt = "22 июля 2021".toDateInMillis(),
-                updatedAt = "22 июля 2021".toDateInMillis()
+                1626987600000L, //  23 июля 2021
+                createdAt = 1626901200000L, //  22 июля 2021
+                updatedAt = 1626901200000L //  22 июля 2021
             ),
             TaskEntity(
                 "c8782fde-cc8f-41a3-9e2a-2ed68c404f90",
                 "test 5",
                 Importance.HIGH,
                 false,
-                "28 июля 2021".toDateInMillis(),
-                createdAt = "24 июля 2021".toDateInMillis(),
-                updatedAt = "24 июля 2021".toDateInMillis()
+                1627419600000L,  // 28 июля 2021
+                createdAt = 1627074000000, // 24 июля 2021
+                updatedAt = 1627074000000 // 24 июля 2021
             ),
         )
     }
