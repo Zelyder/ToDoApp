@@ -13,8 +13,8 @@ fun isOverdue(date: String): Boolean {
     return dates.first < dates.second
 }
 
-fun isToday(date: String): Boolean {
-    val nowTime = Calendar.getInstance().timeInMillis.toDate()
+fun isToday(date: String, locale: Locale = Locale.getDefault()): Boolean {
+    val nowTime = Calendar.getInstance().timeInMillis.toDate(locale = locale)
     return date == nowTime
 }
 
