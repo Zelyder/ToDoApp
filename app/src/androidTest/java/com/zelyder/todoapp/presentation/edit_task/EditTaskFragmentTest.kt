@@ -36,27 +36,29 @@ import org.mockito.Mockito
 @RunWith(AndroidJUnit4::class)
 class EditTaskFragmentTest {
 
-    private lateinit var scenario: FragmentScenario<EditTaskFragment>
     private lateinit var repository: FakeTasksListRepository
+    private lateinit var navController: NavController
+    private lateinit var factory: MainFragmentFactory
 
     @Before
     fun setup() {
-        val bundle = Bundle()
-        bundle.putBoolean("isNewTask", true)
         repository = FakeTasksListRepository()
         val viewModelFactory = ViewModelFactory(repository)
-        val factory = MainFragmentFactory(viewModelFactory)
-        scenario = launchFragmentInContainer(
+        factory = MainFragmentFactory(viewModelFactory)
+        navController = Mockito.mock(NavController::class.java)
+    }
+
+    @Test
+    fun addNewTask_exitWithStatusAdd() {
+        val bundle = Bundle()
+        bundle.putBoolean("isNewTask", true)
+        val scenario: FragmentScenario<EditTaskFragment> = launchFragmentInContainer(
             themeResId = R.style.Theme_ToDoApp,
             fragmentArgs = bundle,
             factory = factory
         )
         scenario.moveToState(Lifecycle.State.STARTED)
-    }
 
-    @Test
-    fun addNewTask_exitWithStatusAdd() {
-        val navController = Mockito.mock(NavController::class.java)
         scenario.onFragment {
             Navigation.setViewNavController(it.requireView(), navController)
         }
@@ -65,13 +67,83 @@ class EditTaskFragmentTest {
         onView(withId(R.id.edit_task_et_text)).perform(replaceText(taskText))
         onView(withId(R.id.edit_task_tv_save)).perform(click())
 
-        scenario.onFragment {
-
-        }
-
         Mockito.verify(navController).navigate(
             EditTaskFragmentDirections.actionEditTaskFragmentToTasksListFragment(
                 EditScreenExitStatus.ADD, any())
+        )
+    }
+
+    @Test
+    fun clickClose_navigateUp() {
+        val bundle = Bundle()
+        bundle.putBoolean("isNewTask", true)
+        val scenario: FragmentScenario<EditTaskFragment> = launchFragmentInContainer(
+            themeResId = R.style.Theme_ToDoApp,
+            fragmentArgs = bundle,
+            factory = factory
+        )
+        scenario.moveToState(Lifecycle.State.STARTED)
+
+        scenario.onFragment {
+            Navigation.setViewNavController(it.requireView(), navController)
+        }
+
+        onView(withId(R.id.edit_task_img_close)).perform(click())
+        Mockito.verify(navController).navigateUp()
+    }
+
+    @Test
+    fun clickDelete_exitWithStatusDelete() {
+        val task = Task("0", "waste task")
+        val bundle = Bundle()
+        bundle.putBoolean("isNewTask", false)
+        bundle.putParcelable("task", task)
+
+        val scenario: FragmentScenario<EditTaskFragment> =  launchFragmentInContainer(
+            themeResId = R.style.Theme_ToDoApp,
+            fragmentArgs = bundle,
+            factory = factory
+        )
+        scenario.moveToState(Lifecycle.State.STARTED)
+
+        scenario.onFragment {
+            Navigation.setViewNavController(it.requireView(), navController)
+        }
+
+        onView(withId(R.id.edit_task_tv_delete)).perform(click())
+
+        Mockito.verify(navController).navigate(
+            EditTaskFragmentDirections.actionEditTaskFragmentToTasksListFragment(
+                EditScreenExitStatus.DELETE, task)
+        )
+    }
+
+    @Test
+    fun clickSave_exitWithStatusEdit() {
+        val task = Task("0", "some task")
+        val bundle = Bundle()
+        bundle.putBoolean("isNewTask", false)
+        bundle.putParcelable("task", task)
+
+        val scenario: FragmentScenario<EditTaskFragment> =  launchFragmentInContainer(
+            themeResId = R.style.Theme_ToDoApp,
+            fragmentArgs = bundle,
+            factory = factory
+        )
+        scenario.moveToState(Lifecycle.State.STARTED)
+
+        scenario.onFragment {
+            Navigation.setViewNavController(it.requireView(), navController)
+        }
+
+        val newTaskText = "edited task"
+        onView(withId(R.id.edit_task_et_text)).perform(replaceText(newTaskText))
+        onView(withId(R.id.edit_task_tv_save)).perform(click())
+        task.text = newTaskText
+
+        Mockito.verify(navController).navigate(
+            EditTaskFragmentDirections.actionEditTaskFragmentToTasksListFragment(
+                EditScreenExitStatus.EDIT, task)
         )
     }
 }
