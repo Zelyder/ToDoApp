@@ -6,14 +6,30 @@ import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.Fragment
 import com.zelyder.todoapp.R
+import com.zelyder.todoapp.appComponent
+import com.zelyder.todoapp.presentation.core.MainFragmentFactory
 import com.zelyder.todoapp.presentation.core.Notifications
+import com.zelyder.todoapp.presentation.core.ViewModelFactory
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.serialization.ExperimentalSerializationApi
+import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
+@ExperimentalSerializationApi
 class MainActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent.inject(this)
         super.onCreate(savedInstanceState)
+        supportFragmentManager.fragmentFactory = MainFragmentFactory(viewModelFactory)
+
         setContentView(R.layout.activity_main)
+
 
         if (savedInstanceState == null) {
             val notifications = Notifications()

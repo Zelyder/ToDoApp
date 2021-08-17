@@ -10,6 +10,7 @@ import com.zelyder.todoapp.data.storage.dao.DeletedTasksDao
 import com.zelyder.todoapp.data.storage.dao.TasksDao
 import com.zelyder.todoapp.data.storage.entities.DeletedTaskEntity
 import com.zelyder.todoapp.data.storage.entities.TaskEntity
+import javax.inject.Inject
 
 
 @Database(entities = [TaskEntity::class, DeletedTaskEntity::class], version = 2)

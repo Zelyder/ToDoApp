@@ -1,5 +1,6 @@
 package com.zelyder.todoapp.presentation.edit_task
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,16 +14,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.zelyder.todoapp.R
+import com.zelyder.todoapp.appComponent
 import com.zelyder.todoapp.domain.enums.EditScreenExitStatus
 import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.presentation.core.Dialogs
+import com.zelyder.todoapp.presentation.core.ViewModelFactory
 import com.zelyder.todoapp.presentation.core.toDate
-import com.zelyder.todoapp.viewModelFactoryProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.serialization.ExperimentalSerializationApi
 import java.util.*
+import javax.inject.Inject
 
 
-class EditTaskFragment : Fragment() {
+class EditTaskFragment @Inject constructor(private val viewModelFactory: ViewModelFactory) : Fragment() {
 
     private var imgClose: ImageView? = null
     private var tvSave: TextView? = null
@@ -37,7 +42,15 @@ class EditTaskFragment : Fragment() {
     lateinit var task: Task
 
     private val args: EditTaskFragmentArgs by navArgs()
-    private val viewModel: EditTaskViewModel by viewModels { viewModelFactoryProvider().viewModelFactory() }
+
+    private val viewModel: EditTaskViewModel by viewModels { viewModelFactory }
+
+    @ExperimentalCoroutinesApi
+    @ExperimentalSerializationApi
+    override fun onAttach(context: Context) {
+        context.appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

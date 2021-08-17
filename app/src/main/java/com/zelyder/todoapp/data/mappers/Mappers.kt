@@ -6,7 +6,6 @@ import com.zelyder.todoapp.domain.enums.Importance
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.presentation.core.toDateInMillis
 import com.zelyder.todoapp.presentation.core.toDate
-import java.lang.IllegalArgumentException
 import java.util.*
 
 fun TaskEntity.toTask() = Task(
@@ -27,13 +26,13 @@ fun Task.toEntity(createdAt: Long? = null, updatedAt: Long? = null) = TaskEntity
     updatedAt = updatedAt ?: Calendar.getInstance().timeInMillis
 )
 
-fun TaskEntity.toDto() = TaskDto(
+fun TaskEntity.toDto(created: Long = createdAt) = TaskDto(
     id = id,
     text = text,
     importance = importance.type,
     done = isDone,
     deadline = deadline / 1000,
-    createdAt = createdAt / 1000,
+    createdAt = created / 1000,
     updatedAt = updatedAt / 1000
 )
 

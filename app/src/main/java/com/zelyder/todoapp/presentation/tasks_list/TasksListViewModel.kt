@@ -4,11 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zelyder.todoapp.di.components.AppScope
+import com.zelyder.todoapp.di.modules.MainDispatcher
 import com.zelyder.todoapp.domain.models.Task
 import com.zelyder.todoapp.domain.repositories.TasksListRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TasksListViewModel(private val tasksListRepository: TasksListRepository) : ViewModel() {
+@AppScope
+class TasksListViewModel @Inject constructor(
+    private val tasksListRepository: TasksListRepository,
+    @MainDispatcher private val dispatcher: CoroutineDispatcher
+) : ViewModel() {
     private val _tasks = MutableLiveData<List<Task>>()
     private val _isHidden = MutableLiveData(true)
     private val _doneCount = MutableLiveData<Int>()
@@ -19,7 +27,7 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
 
 
     fun updateList() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             _tasks.value =
                 if (_isHidden.value == false) tasksListRepository.getTasks() else tasksListRepository.getTasks()
                     .filter { !it.isDone }
@@ -37,39 +45,41 @@ class TasksListViewModel(private val tasksListRepository: TasksListRepository) :
     }
 
     fun checkTask(task: Task) {
-        viewModelScope.launch {
-            tasksListRepository.setCheckTask(taskId = task.id, task.isDone)
+        viewModelScope.launch(dispatcher) {
+            tasksListRepository.editTask(task)
             _doneCount.value = tasksListRepository.getCountOfDone()
         }
     }
 
     fun deleteTask(task: Task) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             tasksListRepository.deleteTaskById(task.id)
             val newList = tasks.value?.toMutableList()
             newList?.remove(task)
-            _tasks.value = newList
+            newList?.let { _tasks.value = it }
+
         }
     }
 
     fun addTask(task: Task) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             tasksListRepository.addTask(task)
             val newList = tasks.value?.toMutableList()
             newList?.add(task)
-            _tasks.value = newList
+            newList?.let { _tasks.value = it }
+
         }
     }
 
     fun editTask(task: Task) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             tasksListRepository.editTask(task)
             updateList()
         }
     }
 
     fun sync() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             tasksListRepository.checkInternetAndSync()
             updateList()
         }
